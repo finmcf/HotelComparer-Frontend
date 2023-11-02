@@ -1,43 +1,47 @@
-import React, { FormEvent } from "react";
+// components/ReservationSearch/ReservationSearch.tsx
+import React, { FormEvent, useState } from "react";
+import LocationInput from "./LocationInput"; // Import the LocationInput component
 
-// LocationInput Component
-const LocationInput = () => (
-  <div className="flex-1">
-    <input
-      type="text"
-      placeholder="Location"
-      className="w-full px-2 py-1 border border-gray-300 rounded text-center" // Centered text
-    />
-  </div>
-);
+type ReservationSearchProps = {
+  amadeusApiKey: string;
+  amadeusApiSecret: string;
+};
 
-// DateInput Component
-const DateInput = ({ label }) => (
+const DateInput = ({ label }: { label: string }) => (
   <div className="flex-1">
     <input
       type="date"
       placeholder={label}
-      className="w-full px-2 py-1 border border-gray-300 rounded text-center" // Centered text
+      className="w-full px-2 py-1 border border-gray-300 rounded text-center"
     />
   </div>
 );
 
-// GuestsInput (Price Range) Component
 const GuestsInput = () => (
   <div className="flex-1">
     <input
-      type="text"
-      placeholder="Price Range"
-      className="w-full px-2 py-1 border border-gray-300 rounded text-center" // Centered text
+      type="number"
+      placeholder="Guests"
+      className="w-full px-2 py-1 border border-gray-300 rounded text-center"
     />
   </div>
 );
 
-// Main ReservationSearch Component
-const ReservationSearch = () => {
+const ReservationSearch: React.FC<ReservationSearchProps> = ({
+  amadeusApiKey,
+  amadeusApiSecret,
+}) => {
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Add your form submission logic here
+    // Handle the form submission with the selected location
+    console.log(selectedLocation);
+  };
+
+  // Function to update the selected location state
+  const handleLocationSelect = (location: any) => {
+    setSelectedLocation(location);
   };
 
   return (
@@ -46,12 +50,17 @@ const ReservationSearch = () => {
         onSubmit={handleSubmit}
         className="flex items-center justify-center gap-2"
       >
-        <LocationInput />
-        <DateInput label="Date" />
+        <LocationInput
+          amadeusApiKey={amadeusApiKey}
+          amadeusApiSecret={amadeusApiSecret}
+          onLocationSelect={handleLocationSelect}
+        />
+        <DateInput label="Check-in" />
+        <DateInput label="Check-out" />
         <GuestsInput />
         <button
           type="submit"
-          className="flex-none px-5 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 text-center" // Centered text in button
+          className="flex-none px-5 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 text-center"
         >
           Search
         </button>
