@@ -1,4 +1,3 @@
-// components/LocationInput.tsx
 import React, { useState, useEffect } from "react";
 
 const LocationInput = ({ onLocationSelect }) => {
@@ -10,10 +9,9 @@ const LocationInput = ({ onLocationSelect }) => {
   const fetchSuggestions = async (keyword) => {
     setLoading(true);
     try {
-      const clientId = process.env.CLIENT_ID;
-      const clientSecret = process.env.CLIENT_SECRET;
+      const clientId = process.env.NEXT_PUBLIC_CLIENT_ID; // Ensure these are securely managed in your environment
+      const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 
-      // The endpoint should be set up in your backend to handle the request and add Authorization headers as needed.
       const response = await fetch(
         `https://localhost:7033/api/Autocomplete?keyword=${encodeURIComponent(
           keyword
@@ -21,9 +19,9 @@ const LocationInput = ({ onLocationSelect }) => {
         {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
-            ClientId: clientId, // Using the client ID from environment variable
-            ClientSecret: clientSecret, // Using the client secret from environment variable
+            // Include other headers your backend might require
+            ClientId: clientId, // Send the client ID if required by your backend
+            ClientSecret: clientSecret, // Send the client secret if required by your backend
           },
         }
       );
@@ -33,7 +31,8 @@ const LocationInput = ({ onLocationSelect }) => {
       }
 
       const data = await response.json();
-      setSuggestions(data);
+      // Assuming your API returns an array under a data property
+      setSuggestions(data.data);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     } finally {
@@ -75,11 +74,11 @@ const LocationInput = ({ onLocationSelect }) => {
         <ul className="absolute left-0 right-0 max-h-60 overflow-auto border border-gray-300 bg-white z-10">
           {suggestions.map((suggestion, index) => (
             <li
-              key={index}
+              key={suggestion.id} // use unique id for key if available
               className="px-2 py-1 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleSuggestionClick(suggestion)}
             >
-              {suggestion.name}
+              {suggestion.name} ({suggestion.address.cityName})
             </li>
           ))}
         </ul>
