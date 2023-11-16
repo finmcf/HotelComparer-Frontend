@@ -1,18 +1,23 @@
 // pages/index.tsx
 
+import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import ReservationSearch from "../components/ReservationSearch/ReservationSearch";
+import NavBar from "../components/Navbar";
 
 const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
   amadeusApiKey,
   amadeusApiSecret,
 }) => {
   return (
-    <div className="flex h-screen justify-center items-center">
-      <ReservationSearch
-        amadeusApiKey={amadeusApiKey}
-        amadeusApiSecret={amadeusApiSecret}
-      />
+    <div className="flex flex-col h-screen">
+      <NavBar />
+      <div className="flex flex-1 justify-center items-center">
+        <ReservationSearch
+          amadeusApiKey={amadeusApiKey}
+          amadeusApiSecret={amadeusApiSecret}
+        />
+      </div>
     </div>
   );
 };
