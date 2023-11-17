@@ -28,12 +28,15 @@ const SearchArea: React.FC = () => {
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
-        className="w-full max-w-[1163px] h-[181px] rounded-[10px] mx-auto"
+        className="w-full max-w-[1163px] h-[181px] rounded-bl-[10px] rounded-br-[10px] mx-auto"
         src="https://via.placeholder.com/1163x181"
         alt="Search Area"
       />
+
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
-        <div className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full"></div>
+        <button className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none">
+          <span className="text-black">&#x2192;</span>
+        </button>
         <div className="w-[35px] h-[0px] left-[378px] top-[51px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
         <div className="w-10 h-[0px] left-[221px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
         <div className="w-10 h-[0px] left-[512px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
