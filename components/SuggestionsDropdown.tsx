@@ -1,6 +1,15 @@
 import React from "react";
+import { Suggestion } from "../interfaces/SearchAreaInterfaces"; // Adjust the import path as needed
 
-const SuggestionsDropdown = ({ suggestions, onSelect }) => {
+interface SuggestionsDropdownProps {
+  suggestions: Suggestion[];
+  onSelect: (suggestion: Suggestion) => void;
+}
+
+const SuggestionsDropdown: React.FC<SuggestionsDropdownProps> = ({
+  suggestions,
+  onSelect,
+}) => {
   return (
     <div className="w-[221px] h-[135px] bg-white rounded-[20px] overflow-auto">
       {suggestions.map((suggestion) => (

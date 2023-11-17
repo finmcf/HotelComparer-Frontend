@@ -2,18 +2,26 @@ import React, { useState, useCallback } from "react";
 import LocationInput from "./ReservationSearch/LocationInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 
-const SearchArea = () => {
-  const [suggestions, setSuggestions] = useState([]); // State to hold suggestions
-  const [selectedLocation, setSelectedLocation] = useState(null);
+interface Suggestion {
+  id: string;
+  name: string;
+  address?: {
+    cityName: string;
+  };
+}
 
-  // Function to update the selected location state
-  const handleLocationSelect = (location) => {
+const SearchArea: React.FC = () => {
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
+    null
+  );
+
+  const handleLocationSelect = (location: Suggestion) => {
     setSelectedLocation(location);
-    setSuggestions([]); // Clear suggestions after selection
+    setSuggestions([]);
   };
 
-  // Wrapped in useCallback to prevent unnecessary re-renders
-  const updateSuggestions = useCallback((newSuggestions) => {
+  const updateSuggestions = useCallback((newSuggestions: Suggestion[]) => {
     setSuggestions(newSuggestions);
   }, []);
 
@@ -29,7 +37,6 @@ const SearchArea = () => {
         <div className="w-[35px] h-[0px] left-[378px] top-[51px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
         <div className="w-10 h-[0px] left-[221px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
         <div className="w-10 h-[0px] left-[512px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
-
         <div className="pl-[17px] pr-[13px] pt-2.5 pb-[5px] left-[226px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex">
           <div className="text-black text-xs font-normal font-sans">
             Check-in
@@ -46,20 +53,21 @@ const SearchArea = () => {
             Check-out Date
           </div>
         </div>
-
         <div className="absolute" style={{ left: "37px", top: "8px" }}>
           <LocationInput
             onLocationSelect={handleLocationSelect}
             updateSuggestions={updateSuggestions}
+            selectedLocation={selectedLocation}
           />
           {suggestions.length > 0 && (
-            <SuggestionsDropdown
-              suggestions={suggestions}
-              onSelect={handleLocationSelect}
-            />
+            <div className="w-[221px] h-[135px] left-[5px] top-[66px] absolute bg-white rounded-[20px]">
+              <SuggestionsDropdown
+                suggestions={suggestions}
+                onSelect={handleLocationSelect}
+              />
+            </div>
           )}
         </div>
-
         <div className="pl-[17px] pr-3.5 pt-2.5 pb-[5px] left-[542px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex">
           <div className="text-black text-xs font-normal font-sans">Guests</div>
           <div className="text-black text-xs font-normal font-sans">Guests</div>

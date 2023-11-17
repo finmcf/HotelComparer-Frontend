@@ -1,27 +1,20 @@
 import React, { useState, useEffect } from "react";
-
-interface Suggestion {
-  id: string;
-  name: string;
-  address?: {
-    cityName: string;
-  };
-}
+import { Suggestion } from "../../interfaces/SearchAreaInterfaces"; // Adjust the import path as needed
 
 interface LocationInputProps {
   onLocationSelect: (suggestion: Suggestion) => void;
   updateSuggestions: (suggestions: Suggestion[]) => void;
+  selectedLocation: Suggestion | null;
 }
 
 const LocationInput: React.FC<LocationInputProps> = ({
   onLocationSelect,
   updateSuggestions,
+  selectedLocation,
 }) => {
   const [input, setInput] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchSuggestions = async (keyword: string) => {
-    setLoading(true);
     try {
       const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
       const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
@@ -50,8 +43,6 @@ const LocationInput: React.FC<LocationInputProps> = ({
     } catch (error) {
       console.error("Error fetching suggestions:", error);
       updateSuggestions([]);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -68,6 +59,12 @@ const LocationInput: React.FC<LocationInputProps> = ({
     return () => clearTimeout(debounceTimer);
   }, [input, updateSuggestions]);
 
+  useEffect(() => {
+    if (selectedLocation) {
+      setInput(selectedLocation.name);
+    }
+  }, [selectedLocation]);
+
   return (
     <div className="relative pl-[17px] pr-[13px] pt-2.5 pb-[5px] flex-col justify-end items-start gap-1.5 w-full">
       <input
@@ -78,12 +75,6 @@ const LocationInput: React.FC<LocationInputProps> = ({
         onChange={(e) => setInput(e.target.value)}
         autoComplete="off"
       />
-
-      {loading && (
-        <div className="absolute left-0 right-0 bg-white text-center py-1">
-          Loading...
-        </div>
-      )}
     </div>
   );
 };
