@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-// Define a type for the suggestion object
 interface Suggestion {
   id: string;
   name: string;
@@ -11,11 +10,14 @@ interface Suggestion {
 
 interface LocationInputProps {
   onLocationSelect: (suggestion: Suggestion) => void;
+  updateSuggestions: (suggestions: Suggestion[]) => void;
 }
 
-const LocationInput: React.FC<LocationInputProps> = ({ onLocationSelect }) => {
+const LocationInput: React.FC<LocationInputProps> = ({
+  onLocationSelect,
+  updateSuggestions,
+}) => {
   const [input, setInput] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchSuggestions = async (keyword: string) => {
@@ -44,59 +46,43 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationSelect }) => {
       }
 
       const data: Suggestion[] = await response.json();
-      setSuggestions(data);
+      updateSuggestions(data);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
-      setSuggestions([]);
+      updateSuggestions([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const debounceFetch = setTimeout(() => {
-      if (input.length >= 3) {
-        fetchSuggestions(input);
-      } else {
-        setSuggestions([]);
-      }
-    }, 500);
-    return () => clearTimeout(debounceFetch);
-  }, [input]);
+    if (input.length < 3) {
+      updateSuggestions([]);
+      return;
+    }
 
-  const handleSuggestionClick = (suggestion: Suggestion) => {
-    setInput(suggestion.name);
-    setSuggestions([]);
-    onLocationSelect(suggestion);
-  };
+    const debounceTimer = setTimeout(() => {
+      fetchSuggestions(input);
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [input, updateSuggestions]);
 
   return (
-    <div className="flex-1 relative">
+    <div className="relative pl-[17px] pr-[13px] pt-2.5 pb-[5px] flex-col justify-end items-start gap-1.5 w-full">
       <input
         type="text"
-        placeholder="Search location"
-        className="w-full px-2 py-1 border border-gray-300 rounded"
+        placeholder="Location"
+        className="text-black text-xs font-normal font-sans bg-transparent border-none outline-none w-full"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         autoComplete="off"
       />
+
       {loading && (
         <div className="absolute left-0 right-0 bg-white text-center py-1">
           Loading...
         </div>
-      )}
-      {suggestions.length > 0 && (
-        <ul className="absolute left-0 right-0 max-h-60 overflow-auto border border-gray-300 bg-white z-10">
-          {suggestions.map((suggestion) => (
-            <li
-              key={suggestion.id}
-              className="px-2 py-1 hover:bg-gray-100 cursor-pointer"
-              onClick={() => handleSuggestionClick(suggestion)}
-            >
-              {suggestion.name} ({suggestion.address?.cityName ?? "No city"})
-            </li>
-          ))}
-        </ul>
       )}
     </div>
   );
