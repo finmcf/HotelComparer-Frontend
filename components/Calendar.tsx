@@ -1,78 +1,91 @@
 import React, { useState } from "react";
 
 const Calendar = () => {
-  // State to hold the current displayed month and year
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
 
   const daysOfWeek = ["M", "T", "W", "T", "F", "S", "S"];
 
-  // Get the last day of the month
+  const firstDayOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  ).getDay();
   const lastDayOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
     0
-  );
+  ).getDate();
 
-  // Function to get the array of dates for the current month
   const getDates = () => {
     const dates = [];
-    for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      dates.push(null);
+    }
+    for (let i = 1; i <= lastDayOfMonth; i++) {
       dates.push(i);
     }
     return dates;
   };
 
-  // Navigate to the previous month
   const goToPreviousMonth = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
     );
   };
 
-  // Navigate to the next month
   const goToNextMonth = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
     );
   };
 
-  // Get month and year for display
   const month = currentDate.toLocaleString("default", { month: "long" });
   const year = currentDate.getFullYear();
 
   return (
-    <div className="w-[221px] h-[300px] bg-white rounded-lg shadow overflow-hidden">
+    <div className="w-[221px] h-[300px] bg-white rounded-lg shadow overflow-auto">
       <div className="px-4 py-2">
-        <div className="text-sm font-semibold">Check-in Date</div>
-        <div className="text-center my-2 text-lg">
+        <div className="text-sm font-semibold text-center">Check-in Date</div>
+        <div className="text-lg my-2 text-center">
           {month} {year}
         </div>
-        <div className="grid grid-cols-7 gap-1 text-center text-xs">
-          {daysOfWeek.map((day) => (
-            <div key={day}>{day}</div>
+        <div className="grid grid-cols-7 gap-1 text-xs">
+          {daysOfWeek.map((day, index) => (
+            <div key={index} className="text-center">
+              {day}
+            </div>
           ))}
-        </div>
-        <div className="grid grid-cols-7 gap-1 text-center text-xs">
-          {getDates().map((date) => (
+          {getDates().map((date, index) => (
             <button
-              key={date}
+              key={index}
               className={`w-8 h-8 flex items-center justify-center mx-auto rounded-full text-black ${
                 selectedDate === date ? "bg-gray-200" : "hover:bg-gray-100"
               }`}
-              onClick={() => setSelectedDate(date)}
+              onClick={() => date && setSelectedDate(date)}
             >
-              {date}
+              {date || ""}
             </button>
           ))}
-        </div>
-        <div className="flex justify-between items-center mt-2">
-          <span className="cursor-pointer text-lg" onClick={goToPreviousMonth}>
-            &lt;
-          </span>
-          <span className="cursor-pointer text-lg" onClick={goToNextMonth}>
-            &gt;
-          </span>
+          {Array.from({ length: 7 - (getDates().length % 7) }).map(
+            (_, index) => (
+              <div key={`padding-${index}`} className="text-center"></div>
+            )
+          )}
+          <div className="flex items-center justify-center">
+            <button
+              onClick={goToPreviousMonth}
+              className="cursor-pointer text-lg"
+            >
+              &lt;
+            </button>
+          </div>
+          <div className="col-span-5"></div>
+          <div className="flex items-center justify-center">
+            <button onClick={goToNextMonth} className="cursor-pointer text-lg">
+              &gt;
+            </button>
+          </div>
         </div>
       </div>
     </div>
