@@ -10,7 +10,9 @@ const Calendar = () => {
     currentDate.getFullYear(),
     currentDate.getMonth(),
     1
-  ).getDay();
+  );
+  // Adjusted to set Monday as the first day of the week
+  const startDayOfWeek = (firstDayOfMonth.getDay() || 7) - 1;
   const lastDayOfMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
@@ -19,7 +21,7 @@ const Calendar = () => {
 
   const getDates = () => {
     const dates = [];
-    for (let i = 0; i < firstDayOfMonth; i++) {
+    for (let i = 0; i < startDayOfWeek; i++) {
       dates.push(null);
     }
     for (let i = 1; i <= lastDayOfMonth; i++) {
@@ -44,7 +46,7 @@ const Calendar = () => {
   const year = currentDate.getFullYear();
 
   return (
-    <div className="w-[221px] h-[300px] bg-white rounded-lg shadow overflow-auto">
+    <div className="w-[300px] h-[300px] bg-white rounded-lg shadow overflow-auto">
       <div className="px-4 py-2">
         <div className="text-sm font-semibold text-center">Check-in Date</div>
         <div className="text-lg my-2 text-center">
