@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const CalendarDropdown = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize with current date
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const daysOfWeek = ["M", "T", "W", "T", "F", "S", "S"];
 
@@ -26,7 +26,6 @@ const CalendarDropdown = () => {
 
   const getDates = () => {
     let dates = [];
-    // Dates from previous month
     for (let i = startDayOfWeek; i > 0; i--) {
       dates.push(
         new Date(
@@ -36,13 +35,11 @@ const CalendarDropdown = () => {
         )
       );
     }
-    // Dates from current month
     for (let i = 1; i <= lastDayOfCurrentMonth; i++) {
       dates.push(
         new Date(currentDate.getFullYear(), currentDate.getMonth(), i)
       );
     }
-    // Dates from next month
     let nextMonth = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + 1,
@@ -65,7 +62,6 @@ const CalendarDropdown = () => {
     );
   };
 
-  // Fix for the goToNextMonth function
   const goToNextMonth = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
@@ -83,9 +79,10 @@ const CalendarDropdown = () => {
   };
 
   const dates = getDates();
+  const totalCells = dates.length + 2;
 
   return (
-    <div className="w-[300px] h-[400px] bg-white rounded-lg shadow overflow-auto">
+    <div className="w-[250px] h-[400px] bg-white rounded-lg shadow overflow-auto">
       <div className="px-4 py-2">
         <div className="text-lg my-2 text-center">
           {currentDate.toLocaleString("default", { month: "long" })}{" "}
@@ -116,15 +113,18 @@ const CalendarDropdown = () => {
               {date.getDate()}
             </button>
           ))}
-        </div>
-        <div className="flex justify-between mt-2">
+          {totalCells % 7 !== 0 && <div className="col-span-1"></div>}
           <button
             onClick={goToPreviousMonth}
-            className="cursor-pointer text-lg"
+            className="col-start-1 cursor-pointer text-lg"
           >
             &lt;
           </button>
-          <button onClick={goToNextMonth} className="cursor-pointer text-lg">
+          {totalCells % 7 !== 0 && <div className="col-span-5"></div>}
+          <button
+            onClick={goToNextMonth}
+            className="col-start-7 cursor-pointer text-lg"
+          >
             &gt;
           </button>
         </div>
