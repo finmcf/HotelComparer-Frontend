@@ -4,7 +4,7 @@ import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import NavBar from "../components/Navbar"; // Assuming NavBar is in components folder
 import SearchArea from "../components/SearchArea"; // Importing SearchArea
-import Calendar from "../components/Calendar";
+import CalendarDropdown from "../components/CalendarDropdown";
 const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
   amadeusApiKey,
   amadeusApiSecret,
@@ -13,7 +13,7 @@ const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
     <div className="flex flex-col h-screen">
       <NavBar />
       <SearchArea />
-      <Calendar />
+      <CalendarDropdown />
     </div>
   );
 };
