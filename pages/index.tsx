@@ -1,10 +1,8 @@
-// pages/index.tsx
-
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
-import NavBar from "../components/Navbar"; // Assuming NavBar is in components folder
-import SearchArea from "../components/SearchArea"; // Importing SearchArea
-import CalendarDropdown from "../components/CalendarDropdown";
+import NavBar from "../components/Navbar";
+import SearchArea from "../components/SearchArea";
+
 const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
   amadeusApiKey,
   amadeusApiSecret,
@@ -13,7 +11,6 @@ const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
     <div className="flex flex-col h-screen">
       <NavBar />
       <SearchArea />
-      <CalendarDropdown />
     </div>
   );
 };

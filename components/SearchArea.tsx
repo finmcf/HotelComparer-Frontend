@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import LocationInput from "./ReservationSearch/LocationInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
+import CalendarDropdown from "./CalendarDropdown";
 
 interface Suggestion {
   id: string;
@@ -15,6 +16,10 @@ const SearchArea: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
     null
   );
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarForCheckOut, setCalendarForCheckOut] = useState(false);
+  const [checkInDate, setCheckInDate] = useState<Date | null>(null);
+  const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
 
   const handleLocationSelect = (location: Suggestion) => {
     setSelectedLocation(location);
@@ -25,6 +30,19 @@ const SearchArea: React.FC = () => {
     setSuggestions(newSuggestions);
   }, []);
 
+  const toggleCalendar = (forCheckOut = false) => {
+    setCalendarForCheckOut(forCheckOut);
+    setShowCalendar(!showCalendar);
+  };
+
+  const handleCheckInDateChange = (date: Date) => {
+    setCheckInDate(date);
+  };
+
+  const handleCheckOutDateChange = (date: Date) => {
+    setCheckOutDate(date);
+  };
+
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
@@ -32,7 +50,6 @@ const SearchArea: React.FC = () => {
         src="https://via.placeholder.com/1163x181"
         alt="Search Area"
       />
-
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
         <button className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none">
           <span className="text-black">&#x2192;</span>
@@ -40,22 +57,30 @@ const SearchArea: React.FC = () => {
         <div className="w-[35px] h-[0px] left-[378px] top-[51px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
         <div className="w-10 h-[0px] left-[221px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
         <div className="w-10 h-[0px] left-[512px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
-        <div className="pl-[17px] pr-[13px] pt-2.5 pb-[5px] left-[226px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex">
+        <button
+          className="pl-[17px] pr-[13px] pt-2.5 pb-[5px] left-[226px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex focus:outline-none"
+          onClick={() => toggleCalendar(false)}
+        >
           <div className="text-black text-xs font-normal font-sans">
             Check-in
           </div>
           <div className="text-black text-xs font-normal font-sans">
-            Check-in Date
+            {checkInDate ? checkInDate.toLocaleDateString() : "Check-in Date"}
           </div>
-        </div>
-        <div className="pl-[17px] pr-3.5 pt-2.5 pb-[5px] left-[393px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex">
+        </button>
+        <button
+          className="pl-[17px] pr-3.5 pt-2.5 pb-[5px] left-[393px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex focus:outline-none"
+          onClick={() => toggleCalendar(true)}
+        >
           <div className="text-black text-xs font-normal font-sans">
             Check-out
           </div>
           <div className="text-black text-xs font-normal font-sans">
-            Check-out Date
+            {checkOutDate
+              ? checkOutDate.toLocaleDateString()
+              : "Check-out Date"}
           </div>
-        </div>
+        </button>
         <div className="absolute" style={{ left: "37px", top: "8px" }}>
           <LocationInput
             onLocationSelect={handleLocationSelect}
@@ -73,8 +98,25 @@ const SearchArea: React.FC = () => {
         </div>
         <div className="pl-[17px] pr-3.5 pt-2.5 pb-[5px] left-[542px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex">
           <div className="text-black text-xs font-normal font-sans">Guests</div>
-          <div className="text-black text-xs font-normal font-sans">Guests</div>
+          <div className="text-black text-xs font-normal font-sans">
+            Add guests
+          </div>
         </div>
+        {showCalendar && (
+          <div
+            className={`absolute bg-white rounded-lg shadow ${
+              calendarForCheckOut ? "left-[393px]" : "left-[226px]"
+            } top-[40px]`}
+            style={{ zIndex: 1000 }}
+          >
+            <CalendarDropdown
+              onCheckInDateChange={handleCheckInDateChange}
+              onCheckOutDateChange={handleCheckOutDateChange}
+              checkInDate={checkInDate}
+              checkOutDate={checkOutDate}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
