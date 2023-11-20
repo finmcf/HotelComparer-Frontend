@@ -140,7 +140,7 @@ const CalendarDropdown = ({
     new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
 
   return (
-    <div className="w-[500px] h-[400px] bg-white rounded-lg shadow overflow-hidden flex">
+    <div className="w-[600px] h-[300px] bg-white rounded-lg shadow overflow-hidden flex">
       {canGoToPreviousMonth && (
         <button
           onClick={() =>
@@ -153,7 +153,7 @@ const CalendarDropdown = ({
           &lt;
         </button>
       )}
-      <div className="w-1/2 border-r border-gray-200">{renderCalendar(0)}</div>
+      <div className="w-1/2">{renderCalendar(0)}</div>
       <div className="w-1/2">{renderCalendar(1)}</div>
       {canGoToNextMonth && (
         <button

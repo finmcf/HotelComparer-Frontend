@@ -104,9 +104,7 @@ const SearchArea: React.FC = () => {
         </div>
         {showCalendar && (
           <div
-            className={`absolute bg-white rounded-lg shadow ${
-              calendarForCheckOut ? "left-[393px]" : "left-[226px]"
-            } top-[40px]`}
+            className="absolute bg-white rounded-lg shadow left-[310px] top-[70px]"
             style={{ zIndex: 1000 }}
           >
             <CalendarDropdown
