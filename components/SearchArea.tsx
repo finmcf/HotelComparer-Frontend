@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import LocationInput from "./ReservationSearch/LocationInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import CalendarDropdown from "./CalendarDropdown";
+import GuestAndRoomCounterDropdown from "./GuestAndRoomCounterDropdown";
 
 interface Suggestion {
   id: string;
@@ -20,28 +21,33 @@ const SearchArea: React.FC = () => {
   const [calendarForCheckOut, setCalendarForCheckOut] = useState(false);
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
+  const [showGuestsDropdown, setShowGuestsDropdown] = useState(false);
 
-  const handleLocationSelect = (location: Suggestion) => {
+  const handleLocationSelect = useCallback((location: Suggestion) => {
     setSelectedLocation(location);
     setSuggestions([]);
-  };
+  }, []);
 
   const updateSuggestions = useCallback((newSuggestions: Suggestion[]) => {
     setSuggestions(newSuggestions);
   }, []);
 
-  const toggleCalendar = (forCheckOut = false) => {
+  const toggleCalendar = useCallback((forCheckOut: boolean = false) => {
     setCalendarForCheckOut(forCheckOut);
-    setShowCalendar(!showCalendar);
-  };
+    setShowCalendar((prevShowCalendar) => !prevShowCalendar);
+  }, []);
 
-  const handleCheckInDateChange = (date: Date) => {
+  const handleCheckInDateChange = useCallback((date: Date | null) => {
     setCheckInDate(date);
-  };
+  }, []);
 
-  const handleCheckOutDateChange = (date: Date) => {
+  const handleCheckOutDateChange = useCallback((date: Date | null) => {
     setCheckOutDate(date);
-  };
+  }, []);
+
+  const toggleGuestsDropdown = useCallback(() => {
+    setShowGuestsDropdown((prevShow) => !prevShow);
+  }, []);
 
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
@@ -96,12 +102,23 @@ const SearchArea: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="pl-[17px] pr-3.5 pt-2.5 pb-[5px] left-[542px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex">
+        <button
+          className="pl-[17px] pr-3.5 pt-2.5 pb-[5px] left-[542px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex focus:outline-none"
+          onClick={toggleGuestsDropdown}
+        >
           <div className="text-black text-xs font-normal font-sans">Guests</div>
           <div className="text-black text-xs font-normal font-sans">
             Add guests
           </div>
-        </div>
+        </button>
+        {showGuestsDropdown && (
+          <div
+            className="absolute bg-white rounded-lg shadow left-0 top-[70px]"
+            style={{ zIndex: 1000 }}
+          >
+            <GuestAndRoomCounterDropdown />
+          </div>
+        )}
         {showCalendar && (
           <div
             className="absolute bg-white rounded-lg shadow left-[310px] top-[70px]"
