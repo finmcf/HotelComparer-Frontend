@@ -12,6 +12,8 @@ interface Suggestion {
   };
 }
 
+type CounterFields = "rooms" | "adults" | "children";
+
 const SearchArea: React.FC = () => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
@@ -22,6 +24,11 @@ const SearchArea: React.FC = () => {
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [showGuestsDropdown, setShowGuestsDropdown] = useState(false);
+  const [counters, setCounters] = useState<Record<CounterFields, number>>({
+    rooms: 1,
+    adults: 1,
+    children: 0,
+  });
 
   const handleLocationSelect = useCallback((location: Suggestion) => {
     setSelectedLocation(location);
@@ -47,6 +54,20 @@ const SearchArea: React.FC = () => {
 
   const toggleGuestsDropdown = useCallback(() => {
     setShowGuestsDropdown((prevShow) => !prevShow);
+  }, []);
+
+  const incrementCounter = useCallback((field: CounterFields) => {
+    setCounters((prevCounters) => ({
+      ...prevCounters,
+      [field]: prevCounters[field] + 1,
+    }));
+  }, []);
+
+  const decrementCounter = useCallback((field: CounterFields) => {
+    setCounters((prevCounters) => ({
+      ...prevCounters,
+      [field]: prevCounters[field] > 0 ? prevCounters[field] - 1 : 0,
+    }));
   }, []);
 
   return (
@@ -116,7 +137,11 @@ const SearchArea: React.FC = () => {
             className="absolute bg-white rounded-lg shadow left-0 top-[70px]"
             style={{ zIndex: 1000 }}
           >
-            <GuestAndRoomCounterDropdown />
+            <GuestAndRoomCounterDropdown
+              counters={counters}
+              incrementCounter={incrementCounter}
+              decrementCounter={decrementCounter}
+            />
           </div>
         )}
         {showCalendar && (

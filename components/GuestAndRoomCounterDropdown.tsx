@@ -1,28 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 
 type CounterFields = "rooms" | "adults" | "children";
 
-const GuestAndRoomCounterDropdown: React.FC = () => {
-  const [counters, setCounters] = useState<Record<CounterFields, number>>({
-    rooms: 1,
-    adults: 1,
-    children: 0,
-  });
+interface GuestAndRoomCounterDropdownProps {
+  counters: Record<CounterFields, number>;
+  incrementCounter: (field: CounterFields) => void;
+  decrementCounter: (field: CounterFields) => void;
+}
 
-  const increment = (field: CounterFields) => {
-    setCounters((prevCounters) => ({
-      ...prevCounters,
-      [field]: prevCounters[field] + 1,
-    }));
-  };
-
-  const decrement = (field: CounterFields) => {
-    setCounters((prevCounters) => ({
-      ...prevCounters,
-      [field]: prevCounters[field] > 0 ? prevCounters[field] - 1 : 0,
-    }));
-  };
-
+const GuestAndRoomCounterDropdown: React.FC<
+  GuestAndRoomCounterDropdownProps
+> = ({ counters, incrementCounter, decrementCounter }) => {
   return (
     <div className="w-[221px] bg-white rounded-[20px] overflow-auto shadow p-4">
       {Object.entries(counters).map(([field, value]) => (
@@ -39,7 +27,7 @@ const GuestAndRoomCounterDropdown: React.FC = () => {
           </div>
           <div className="flex items-center">
             <button
-              onClick={() => decrement(field as CounterFields)}
+              onClick={() => decrementCounter(field as CounterFields)}
               className="text-black font-sans text-lg w-8 h-8 rounded-full border border-blue-200 flex justify-center items-center mx-1"
             >
               -
@@ -48,7 +36,7 @@ const GuestAndRoomCounterDropdown: React.FC = () => {
               {value}
             </div>
             <button
-              onClick={() => increment(field as CounterFields)}
+              onClick={() => incrementCounter(field as CounterFields)}
               className="text-black font-sans text-lg w-8 h-8 rounded-full border border-blue-200 flex justify-center items-center mx-1"
             >
               +
