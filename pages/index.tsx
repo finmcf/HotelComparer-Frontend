@@ -2,6 +2,7 @@ import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import NavBar from "../components/Navbar";
 import SearchArea from "../components/SearchArea";
+import GuestAndRoomCounterDropdown from "../components/GuestAndRoomCounterDropdown";
 
 const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
   amadeusApiKey,
@@ -11,6 +12,7 @@ const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
     <div className="flex flex-col h-screen">
       <NavBar />
       <SearchArea />
+      <GuestAndRoomCounterDropdown />
     </div>
   );
 };

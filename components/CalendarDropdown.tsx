@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 
-const CalendarDropdown = ({
+interface CalendarDropdownProps {
+  onCheckInDateChange: (date: Date | null) => void;
+  onCheckOutDateChange: (date: Date | null) => void;
+  checkInDate: Date | null;
+  checkOutDate: Date | null;
+}
+
+const CalendarDropdown: React.FC<CalendarDropdownProps> = ({
   onCheckInDateChange,
   onCheckOutDateChange,
   checkInDate,
   checkOutDate,
 }) => {
   const now = new Date();
-  const [baseDate, setBaseDate] = useState(now);
+  const [baseDate, setBaseDate] = useState<Date>(now);
   const daysOfWeek = ["M", "T", "W", "T", "F", "S", "S"];
 
-  const renderCalendar = (offsetMonth) => {
+  const renderCalendar = (offsetMonth: number) => {
     const currentDate = new Date(
       baseDate.getFullYear(),
       baseDate.getMonth() + offsetMonth,
@@ -65,8 +72,7 @@ const CalendarDropdown = ({
       return dates;
     };
 
-    const handleDateClick = (date) => {
-      // Check if the selected date's month is different from both displayed months
+    const handleDateClick = (date: Date) => {
       if (
         date.getMonth() !== baseDate.getMonth() &&
         date.getMonth() !==
@@ -76,7 +82,6 @@ const CalendarDropdown = ({
             1
           ).getMonth()
       ) {
-        // Adjust baseDate to ensure the selected month and its adjacent month are displayed
         setBaseDate(new Date(date.getFullYear(), date.getMonth() - 1, 1));
       }
 
@@ -112,9 +117,7 @@ const CalendarDropdown = ({
                   date.toDateString() === checkInDate.toDateString()) ||
                 (checkOutDate &&
                   date.toDateString() === checkOutDate.toDateString())
-                  ? date.getMonth() === currentDate.getMonth()
-                    ? "bg-blue-600 text-white"
-                    : ""
+                  ? "bg-blue-600 text-white"
                   : ""
               } ${
                 date.getMonth() !== currentDate.getMonth()
