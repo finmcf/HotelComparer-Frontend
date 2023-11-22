@@ -1,8 +1,13 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import { LoadingProvider } from "../contexts/LoadingContext"; // Import the LoadingProvider
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <LoadingProvider>
+      <Component {...pageProps} />
+    </LoadingProvider>
+  );
 }
 
-export default MyApp
+export default MyApp;

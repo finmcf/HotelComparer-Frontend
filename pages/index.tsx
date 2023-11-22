@@ -2,15 +2,23 @@ import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import NavBar from "../components/Navbar";
 import SearchArea from "../components/SearchArea";
+import { useLoading } from "../contexts/LoadingContext";
 
 const Home: NextPage<{ amadeusApiKey: string; amadeusApiSecret: string }> = ({
   amadeusApiKey,
   amadeusApiSecret,
 }) => {
+  const { showLoading } = useLoading(); // Removed hideLoading from destructuring
+
+  const someAction = async () => {
+    showLoading();
+    // hideLoading(); // Removed this line to keep the loader visible indefinitely
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <NavBar />
-      <SearchArea />
+      <SearchArea onAction={someAction} />
     </div>
   );
 };

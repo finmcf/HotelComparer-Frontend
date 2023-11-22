@@ -1,9 +1,19 @@
 // searchAreaInterfaces.ts
 
 export interface Suggestion {
-  id: string;
+  id: number;
   name: string;
-  address?: {
+  iataCode: string;
+  subType: string;
+  relevance: number;
+  type: string;
+  hotelIds: string[];
+  address: {
     cityName: string;
+    countryCode: string;
+  };
+  geoCode: {
+    latitude: number;
+    longitude: number;
   };
 }

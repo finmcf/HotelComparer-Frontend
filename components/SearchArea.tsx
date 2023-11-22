@@ -3,18 +3,15 @@ import LocationInput from "./ReservationSearch/LocationInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import CalendarDropdown from "./CalendarDropdown";
 import GuestAndRoomCounterDropdown from "./GuestAndRoomCounterDropdown";
-
-interface Suggestion {
-  id: string;
-  name: string;
-  address?: {
-    cityName: string;
-  };
-}
+import { Suggestion } from "../interfaces/SearchAreaInterfaces";
 
 type CounterFields = "rooms" | "adults" | "children";
 
-const SearchArea: React.FC = () => {
+type SearchAreaProps = {
+  onAction: () => void;
+};
+
+const SearchArea: React.FC<SearchAreaProps> = ({ onAction }) => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
     null
@@ -70,6 +67,10 @@ const SearchArea: React.FC = () => {
     }));
   }, []);
 
+  const handleButtonClick = () => {
+    onAction();
+  };
+
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
@@ -78,7 +79,10 @@ const SearchArea: React.FC = () => {
         alt="Search Area"
       />
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
-        <button className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none">
+        <button
+          className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none"
+          onClick={handleButtonClick}
+        >
           <span className="text-black">&#x2192;</span>
         </button>
         <div className="w-[35px] h-[0px] left-[378px] top-[51px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
