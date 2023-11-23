@@ -1,38 +1,29 @@
-// context/LoadingContext.tsx
+import React, { createContext, useState, useContext, ReactNode } from "react";
 
-import React, { createContext, useContext, useState } from "react";
-import { BeatLoader } from "react-spinners";
+type LoadingContextType = {
+  isLoading: boolean;
+  setLoading: (isLoading: boolean) => void;
+};
 
-const LoadingContext = createContext({
+const LoadingContext = createContext<LoadingContextType>({
   isLoading: false,
-  showLoading: () => {},
-  hideLoading: () => {},
+  setLoading: () => {},
 });
 
 export const useLoading = () => useContext(LoadingContext);
 
-const LoadingOverlay = () => {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <BeatLoader color="#ffffff" loading={true} size={15} />
-    </div>
-  );
+type LoadingProviderProps = {
+  children: ReactNode;
 };
 
-export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({
+export const LoadingProvider: React.FC<LoadingProviderProps> = ({
   children,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const showLoading = () => setIsLoading(true);
-  const hideLoading = () => setIsLoading(false);
+  const [isLoading, setLoading] = useState(false);
 
   return (
-    <LoadingContext.Provider value={{ isLoading, showLoading, hideLoading }}>
+    <LoadingContext.Provider value={{ isLoading, setLoading }}>
       {children}
-      {isLoading && <LoadingOverlay />}
     </LoadingContext.Provider>
   );
 };
-
-export default LoadingProvider;

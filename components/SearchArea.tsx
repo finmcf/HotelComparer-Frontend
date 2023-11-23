@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useLoading } from "../contexts/LoadingContext";
 import LocationInput from "./ReservationSearch/LocationInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import CalendarDropdown from "./CalendarDropdown";
@@ -7,11 +8,8 @@ import { Suggestion } from "../interfaces/SearchAreaInterfaces";
 
 type CounterFields = "rooms" | "adults" | "children";
 
-type SearchAreaProps = {
-  onAction: () => void;
-};
-
-const SearchArea: React.FC<SearchAreaProps> = ({ onAction }) => {
+const SearchArea: React.FC = () => {
+  const { setLoading } = useLoading();
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
     null
@@ -63,12 +61,12 @@ const SearchArea: React.FC<SearchAreaProps> = ({ onAction }) => {
   const decrementCounter = useCallback((field: CounterFields) => {
     setCounters((prevCounters) => ({
       ...prevCounters,
-      [field]: prevCounters[field] > 0 ? prevCounters[field] - 1 : 0,
+      [field]: Math.max(prevCounters[field] - 1, 0),
     }));
   }, []);
 
   const handleButtonClick = () => {
-    onAction();
+    setLoading(true);
   };
 
   return (
