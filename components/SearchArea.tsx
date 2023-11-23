@@ -72,7 +72,7 @@ const SearchArea: React.FC = () => {
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
-        className="w-full max-w-[900px] h-[300px] rounded-bl-[10px] rounded-br-[10px] mx-auto"
+        className="w-full h-[300px] object-cover object-center rounded-bl-lg rounded-br-lg mx-auto max-w-[900px]"
         src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Scenic View"
       />
