@@ -72,10 +72,11 @@ const SearchArea: React.FC = () => {
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
-        className="w-full max-w-[1163px] h-[181px] rounded-bl-[10px] rounded-br-[10px] mx-auto"
-        src="https://via.placeholder.com/1163x181"
-        alt="Search Area"
+        className="w-full max-w-[900px] h-[300px] rounded-bl-[10px] rounded-br-[10px] mx-auto"
+        src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Scenic View"
       />
+
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
         <button
           className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none"

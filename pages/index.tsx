@@ -1,7 +1,7 @@
 import React from "react";
 import { useLoading } from "../contexts/LoadingContext";
 import { BeatLoader } from "react-spinners";
-import NavBar from "../components/Navbar";
+import NavBar from "../components/NavBar";
 import SearchArea from "../components/SearchArea";
 
 const Home = () => {
