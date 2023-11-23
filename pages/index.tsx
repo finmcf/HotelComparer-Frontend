@@ -1,26 +1,51 @@
 import React from "react";
-import { useLoading } from "../contexts/LoadingContext";
+import { useUI } from "../contexts/UIContext";
 import { BeatLoader } from "react-spinners";
 import NavBar from "../components/NavBar";
 import SearchArea from "../components/SearchArea";
+import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
 
 const Home = () => {
-  const { isLoading } = useLoading();
+  const { isLoading, isModalOpen, openModal, closeModal } = useUI();
+
+  const handleCurrencyAndLanguageSave = (
+    language: string,
+    currency: string
+  ) => {
+    console.log(`Language: ${language}, Currency: ${currency}`);
+    closeModal();
+  };
+
+  const handleCurrencyOrFlagClick = () => {
+    openModal();
+  };
 
   return (
-    <div
-      className={`flex flex-col h-screen relative ${
-        isLoading ? "opacity-50" : ""
-      }`}
-    >
-      <NavBar />
-      <SearchArea />
-      {isLoading && (
-        <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-70 z-50">
-          <BeatLoader color="#FFFFFF" />
-        </div>
+    <>
+      <div
+        className={`flex flex-col h-screen relative ${
+          isLoading || isModalOpen ? "opacity-50" : ""
+        }`}
+      >
+        <NavBar
+          onCurrencyClick={handleCurrencyOrFlagClick}
+          onFlagClick={handleCurrencyOrFlagClick}
+        />
+        <SearchArea />
+        {isLoading && (
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-70 z-50">
+            <BeatLoader color="#FFFFFF" />
+          </div>
+        )}
+      </div>
+      {isModalOpen && (
+        <CurrencyAndLanguageModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onSave={handleCurrencyAndLanguageSave}
+        />
       )}
-    </div>
+    </>
   );
 };
 

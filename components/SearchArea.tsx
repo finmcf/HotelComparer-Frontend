@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useLoading } from "../contexts/LoadingContext";
+import { useUI } from "../contexts/UIContext";
 import LocationInput from "./ReservationSearch/LocationInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import CalendarDropdown from "./CalendarDropdown";
@@ -9,7 +9,7 @@ import { Suggestion } from "../interfaces/SearchAreaInterfaces";
 type CounterFields = "rooms" | "adults" | "children";
 
 const SearchArea: React.FC = () => {
-  const { setLoading } = useLoading();
+  const { setLoading } = useUI();
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
     null

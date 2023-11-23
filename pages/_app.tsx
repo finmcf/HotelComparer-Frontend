@@ -1,12 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { LoadingProvider } from "../contexts/LoadingContext"; // Import the LoadingProvider
+import { UIProvider } from "../contexts/UIContext"; // Import the UIProvider
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <LoadingProvider>
+    <UIProvider>
       <Component {...pageProps} />
-    </LoadingProvider>
+    </UIProvider>
   );
 }
 
