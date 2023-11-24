@@ -11,7 +11,7 @@ type CounterFields = "rooms" | "adults" | "children";
 
 const SearchArea: React.FC = () => {
   const router = useRouter();
-  const { setLoading } = useGlobal();
+  const { currency, language, setLoading } = useGlobal();
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
     null
@@ -67,19 +67,42 @@ const SearchArea: React.FC = () => {
     }));
   }, []);
 
-  const fetchHotelData = async () => {
+  const fetchHotelData = async (
+    languageCode: string,
+    currencyCode: string,
+    setLoading: (isLoading: boolean) => void
+  ) => {
     setLoading(true);
     const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
     const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 
     try {
-      const response = await fetch("http://localhost:7033/api/your-endpoint", {
-        method: "GET",
-        headers: {
-          "Client-ID": clientId ?? "",
-          "Client-Secret": clientSecret ?? "",
-        },
+      // Get the first hotel ID from the selected location's hotelIds array
+      const hotelIdsParam =
+        selectedLocation && selectedLocation.hotelIds.length > 0
+          ? selectedLocation.hotelIds[0]
+          : "";
+
+      const queryParams = new URLSearchParams({
+        HotelIds: hotelIdsParam,
+        CheckInDate: checkInDate ? checkInDate.toISOString().split("T")[0] : "",
+        CheckOutDate: checkOutDate
+          ? checkOutDate.toISOString().split("T")[0]
+          : "",
+        Language: languageCode,
+        Currency: currencyCode,
       });
+
+      const response = await fetch(
+        `http://localhost:7033/api/Hotels?${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Client-ID": clientId ?? "",
+            "Client-Secret": clientSecret ?? "",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
@@ -98,7 +121,7 @@ const SearchArea: React.FC = () => {
   };
 
   const handleButtonClick = () => {
-    fetchHotelData();
+    fetchHotelData(language.code, currency.code, setLoading);
   };
 
   return (
@@ -115,7 +138,7 @@ const SearchArea: React.FC = () => {
         >
           <span className="text-black">&#x2192;</span>
         </button>
-        {/* Other components and buttons */}
+
         <button
           className="pl-[17px] pr-[13px] pt-2.5 pb-[5px] left-[226px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex focus:outline-none"
           onClick={() => toggleCalendar(false)}
