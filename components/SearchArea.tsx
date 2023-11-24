@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { useUI } from "../contexts/UIContext";
+import { useRouter } from "next/router";
+import { useGlobal } from "../contexts/GlobalContext";
 import LocationInput from "./ReservationSearch/LocationInput";
 import SuggestionsDropdown from "./SuggestionsDropdown";
 import CalendarDropdown from "./CalendarDropdown";
@@ -9,7 +10,8 @@ import { Suggestion } from "../interfaces/SearchAreaInterfaces";
 type CounterFields = "rooms" | "adults" | "children";
 
 const SearchArea: React.FC = () => {
-  const { setLoading } = useUI();
+  const router = useRouter();
+  const { setLoading } = useGlobal();
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
     null
@@ -65,8 +67,38 @@ const SearchArea: React.FC = () => {
     }));
   }, []);
 
-  const handleButtonClick = () => {
+  const fetchHotelData = async () => {
     setLoading(true);
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+    const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+
+    try {
+      const response = await fetch("http://localhost:7033/api/your-endpoint", {
+        method: "GET",
+        headers: {
+          "Client-ID": clientId ?? "",
+          "Client-Secret": clientSecret ?? "",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setLoading(false);
+      router.push({
+        pathname: "/searchresults",
+        query: { data: JSON.stringify(data) },
+      });
+    } catch (error) {
+      console.error("Error fetching hotel data:", error);
+      setLoading(false);
+    }
+  };
+
+  const handleButtonClick = () => {
+    fetchHotelData();
   };
 
   return (
@@ -76,7 +108,6 @@ const SearchArea: React.FC = () => {
         src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Scenic View"
       />
-
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
         <button
           className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none"
@@ -84,9 +115,7 @@ const SearchArea: React.FC = () => {
         >
           <span className="text-black">&#x2192;</span>
         </button>
-        <div className="w-[35px] h-[0px] left-[378px] top-[51px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
-        <div className="w-10 h-[0px] left-[221px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
-        <div className="w-10 h-[0px] left-[512px] top-[53.01px] absolute origin-top-left -rotate-90 border border-neutral-200"></div>
+        {/* Other components and buttons */}
         <button
           className="pl-[17px] pr-[13px] pt-2.5 pb-[5px] left-[226px] top-[8px] absolute flex-col justify-end items-start gap-1.5 inline-flex focus:outline-none"
           onClick={() => toggleCalendar(false)}

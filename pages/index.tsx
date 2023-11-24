@@ -1,12 +1,12 @@
 import React from "react";
-import { useUI } from "../contexts/UIContext";
+import { useGlobal } from "../contexts/GlobalContext"; // Updated import
 import { BeatLoader } from "react-spinners";
 import NavBar from "../components/NavBar";
 import SearchArea from "../components/SearchArea";
 import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
 
 const Home = () => {
-  const { isLoading, isModalOpen, openModal, closeModal } = useUI();
+  const { isLoading, isModalOpen, openModal, closeModal } = useGlobal(); // Updated context hook
 
   const handleCurrencyAndLanguageSave = (
     language: string,

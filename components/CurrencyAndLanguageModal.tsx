@@ -1,25 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useGlobal } from "../contexts/GlobalContext";
+import currencies from "../data/currencies.json";
+import languages from "../data/languages.json";
 
 interface CurrencyAndLanguageModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (language: string, currency: string) => void;
 }
 
 const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
   isOpen,
   onClose,
-  onSave,
 }) => {
-  const [language, setLanguage] = useState("English");
-  const [currency, setCurrency] = useState("USD");
+  const {
+    setLanguage,
+    setCurrency,
+    language: currentLanguage,
+    currency: currentCurrency,
+  } = useGlobal();
 
-  if (!isOpen) return null;
+  const [selectedLanguageCode, setSelectedLanguageCode] = useState<string>(
+    currentLanguage.code
+  );
+  const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<string>(
+    currentCurrency.code
+  );
+
+  useEffect(() => {
+    setSelectedLanguageCode(currentLanguage.code);
+    setSelectedCurrencyCode(currentCurrency.code);
+  }, [currentLanguage, currentCurrency]);
+
+  const handleSave = () => {
+    const selectedLanguage = Object.values(languages).find(
+      (lang) => lang.code === selectedLanguageCode
+    );
+    const selectedCurrency = Object.values(currencies).find(
+      (curr) => curr.code === selectedCurrencyCode
+    );
+
+    if (selectedLanguage && selectedCurrency) {
+      setLanguage(selectedLanguage);
+      setCurrency(selectedCurrency);
+    }
+    onClose();
+  };
 
   return (
     <div
-      className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
-      id="my-modal"
+      className={`fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full ${
+        !isOpen && "hidden"
+      }`}
     >
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div className="mt-3 text-center">
@@ -45,13 +76,14 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
               id="language"
               name="language"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              value={selectedLanguageCode}
+              onChange={(e) => setSelectedLanguageCode(e.target.value)}
             >
-              <option value="English">English (United Kingdom)</option>
-              <option value="Spanish">Spanish</option>
-              <option value="French">French</option>
-              {/* ...other languages */}
+              {Object.values(languages).map((lang) => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="mt-4">
@@ -65,20 +97,21 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
               id="currency"
               name="currency"
               className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
+              value={selectedCurrencyCode}
+              onChange={(e) => setSelectedCurrencyCode(e.target.value)}
             >
-              <option value="USD">USD - $</option>
-              <option value="EUR">EUR - €</option>
-              <option value="GBP">GBP - £</option>
-              {/* ...other currencies */}
+              {Object.values(currencies).map((curr) => (
+                <option key={curr.code} value={curr.code}>
+                  {curr.name} ({curr.symbol_native})
+                </option>
+              ))}
             </select>
           </div>
           <div className="items-center px-4 py-3">
             <button
               id="ok-btn"
               className="px-4 py-2 bg-indigo-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-              onClick={() => onSave(language, currency)}
+              onClick={handleSave}
             >
               Save
             </button>

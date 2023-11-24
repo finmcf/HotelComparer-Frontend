@@ -4,11 +4,11 @@ import { NextPage } from "next";
 import FilterSidebar from "../components/FilterSideBar";
 import WebsiteInfoFooter from "../components/WebsiteInfoFooter";
 import HotelSearchResults from "../components/HotelSearchResult";
-import { useUI } from "../contexts/UIContext";
+import { useGlobal } from "../contexts/GlobalContext"; // Updated import
 import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
 
 const SearchResults: NextPage = () => {
-  const { isModalOpen, openModal, closeModal } = useUI();
+  const { isModalOpen, openModal, closeModal } = useGlobal(); // Updated context hook
 
   const handleCurrencyOrFlagClick = () => {
     openModal();
