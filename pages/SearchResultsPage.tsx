@@ -1,14 +1,29 @@
-import React from "react";
-import NavBar from "../components/NavBar";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { NextPage } from "next";
+import NavBar from "../components/NavBar";
 import FilterSidebar from "../components/FilterSideBar";
 import WebsiteInfoFooter from "../components/WebsiteInfoFooter";
 import HotelSearchResults from "../components/HotelSearchResult";
-import { useGlobal } from "../contexts/GlobalContext"; // Updated import
+import { useGlobal } from "../contexts/GlobalContext";
 import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
 
 const SearchResults: NextPage = () => {
-  const { isModalOpen, openModal, closeModal } = useGlobal(); // Updated context hook
+  const router = useRouter();
+  const { isModalOpen, openModal, closeModal } = useGlobal();
+  const [hotelData, setHotelData] = useState(null);
+
+  useEffect(() => {
+    if (router.query.data) {
+      try {
+        const data = JSON.parse(router.query.data as string);
+        setHotelData(data);
+      } catch (error) {
+        console.error("Error parsing hotel data:", error);
+        // Handle error or set default state
+      }
+    }
+  }, [router.query]);
 
   const handleCurrencyOrFlagClick = () => {
     openModal();
@@ -27,7 +42,8 @@ const SearchResults: NextPage = () => {
         />
         <div className="flex flex-grow">
           <FilterSidebar />
-          <HotelSearchResults />
+          <HotelSearchResults data={hotelData} />{" "}
+          {/* Pass the data to the HotelSearchResults component */}
         </div>
         <WebsiteInfoFooter />
       </div>
