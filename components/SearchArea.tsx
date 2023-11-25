@@ -77,7 +77,6 @@ const SearchArea: React.FC = () => {
     const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 
     try {
-      // Get the first hotel ID from the selected location's hotelIds array
       const hotelIdsParam =
         selectedLocation && selectedLocation.hotelIds.length > 0
           ? selectedLocation.hotelIds[0]
@@ -94,12 +93,12 @@ const SearchArea: React.FC = () => {
       });
 
       const response = await fetch(
-        `http://localhost:7033/api/Hotels?${queryParams.toString()}`,
+        `https://localhost:7033/api/Hotels?${queryParams.toString()}`,
         {
           method: "GET",
           headers: {
-            "Client-ID": clientId ?? "",
-            "Client-Secret": clientSecret ?? "",
+            ClientID: clientId ?? "",
+            ClientSecret: clientSecret ?? "",
           },
         }
       );

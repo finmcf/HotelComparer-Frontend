@@ -42,8 +42,7 @@ const SearchResults: NextPage = () => {
         />
         <div className="flex flex-grow">
           <FilterSidebar />
-          <HotelSearchResults data={hotelData} />{" "}
-          {/* Pass the data to the HotelSearchResults component */}
+          <HotelSearchResults data={hotelData} />
         </div>
         <WebsiteInfoFooter />
       </div>
