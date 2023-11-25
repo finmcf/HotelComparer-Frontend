@@ -110,7 +110,7 @@ const SearchArea: React.FC = () => {
       const data = await response.json();
       setLoading(false);
       router.push({
-        pathname: "/searchresults",
+        pathname: "/searchresultspage",
         query: { data: JSON.stringify(data) },
       });
     } catch (error) {
