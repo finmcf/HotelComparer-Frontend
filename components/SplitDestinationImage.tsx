@@ -15,7 +15,7 @@ const SplitDestinationImage: React.FC<SplitDestinationImageProps> = ({
 
   return (
     <div className="flex flex-col items-center w-[272.25px]">
-      <div className="h-[185.5px] overflow-hidden rounded-t-xl">
+      <div className="h-[185.5px] overflow-hidden rounded-xl">
         <img
           src={src}
           alt={`${alt} - Top Half`}
@@ -26,7 +26,7 @@ const SplitDestinationImage: React.FC<SplitDestinationImageProps> = ({
           }}
         />
       </div>
-      <div className="h-[185.5px] overflow-hidden rounded-b-xl mt-2.5">
+      <div className="h-[185.5px] overflow-hidden rounded-xl mt-2.5">
         <img
           src={src}
           alt={`${alt} - Bottom Half`}
