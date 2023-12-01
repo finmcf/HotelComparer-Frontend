@@ -6,11 +6,13 @@ import languages from "../data/languages.json";
 interface CurrencyAndLanguageModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave: (languageCode: string, currencyCode: string) => void;
 }
 
 const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
   isOpen,
   onClose,
+  onSave,
 }) => {
   const {
     setLanguage,
@@ -42,6 +44,7 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
     if (selectedLanguage && selectedCurrency) {
       setLanguage(selectedLanguage);
       setCurrency(selectedCurrency);
+      onSave(selectedLanguage.code, selectedCurrency.code);
     }
     onClose();
   };

@@ -77,20 +77,35 @@ const SearchArea: React.FC = () => {
     const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 
     try {
-      const hotelIdsParam =
-        selectedLocation && selectedLocation.hotelIds.length > 0
-          ? selectedLocation.hotelIds[0]
-          : "";
+      const latitude = selectedLocation?.latitude
+        ? selectedLocation.latitude.toString()
+        : "";
+      const longitude = selectedLocation?.longitude
+        ? selectedLocation.longitude.toString()
+        : "";
+      const radius = "5"; // Example radius, adjust as needed
+      const maxHotels = "10"; // Example max hotels, adjust as needed
 
       const queryParams = new URLSearchParams({
-        HotelIds: hotelIdsParam,
         CheckInDate: checkInDate ? checkInDate.toISOString().split("T")[0] : "",
         CheckOutDate: checkOutDate
           ? checkOutDate.toISOString().split("T")[0]
           : "",
         Language: languageCode,
         Currency: currencyCode,
+        Latitude: latitude,
+        Longitude: longitude,
+        Radius: radius,
+        MaxHotels: maxHotels,
       });
+
+      if (
+        selectedLocation &&
+        selectedLocation.hotelIds &&
+        selectedLocation.hotelIds.length > 0
+      ) {
+        queryParams.set("HotelIds", selectedLocation.hotelIds.join(","));
+      }
 
       const response = await fetch(
         `https://localhost:7033/api/Hotels?${queryParams.toString()}`,

@@ -1,12 +1,13 @@
 import React from "react";
-import { useGlobal } from "../contexts/GlobalContext"; // Updated import
+import { useGlobal } from "../contexts/GlobalContext";
 import { BeatLoader } from "react-spinners";
 import NavBar from "../components/NavBar";
 import SearchArea from "../components/SearchArea";
 import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
+import DestinationGallery from "../components/DestinationGallery";
 
 const Home = () => {
-  const { isLoading, isModalOpen, openModal, closeModal } = useGlobal(); // Updated context hook
+  const { isLoading, isModalOpen, openModal, closeModal } = useGlobal();
 
   const handleCurrencyAndLanguageSave = (
     language: string,
@@ -23,7 +24,7 @@ const Home = () => {
   return (
     <>
       <div
-        className={`flex flex-col h-screen relative ${
+        className={`flex flex-col relative ${
           isLoading || isModalOpen ? "opacity-50" : ""
         }`}
       >
@@ -37,7 +38,13 @@ const Home = () => {
             <BeatLoader color="#FFFFFF" />
           </div>
         )}
+
+        {/* Adjusted top margin for DestinationGallery */}
+        <div className="mt-40">
+          <DestinationGallery />
+        </div>
       </div>
+
       {isModalOpen && (
         <CurrencyAndLanguageModal
           isOpen={isModalOpen}

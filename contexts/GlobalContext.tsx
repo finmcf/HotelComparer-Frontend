@@ -15,16 +15,24 @@ type LanguageInfo = {
   name: string;
 };
 
+type LocationInfo = {
+  latitude: number | null;
+  longitude: number | null;
+};
+
 type GlobalContextType = {
   isLoading: boolean;
   isModalOpen: boolean;
   language: LanguageInfo;
   currency: CurrencyInfo;
+  location: LocationInfo;
   setLoading: (isLoading: boolean) => void;
   openModal: () => void;
   closeModal: () => void;
   setLanguage: (language: LanguageInfo) => void;
   setCurrency: (currency: CurrencyInfo) => void;
+  setLocation: (location: LocationInfo) => void;
+  fetchUserLocation: () => void;
 };
 
 const defaultLanguage: LanguageInfo = { code: "en", name: "English" };
@@ -49,9 +57,33 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isModalOpen, setModalOpen] = useState(false);
   const [language, setLanguage] = useState<LanguageInfo>(defaultLanguage);
   const [currency, setCurrency] = useState<CurrencyInfo>(defaultCurrency);
+  const [location, setLocation] = useState<LocationInfo>({
+    latitude: null,
+    longitude: null,
+  });
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+
+  const fetchUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error fetching location", error);
+          setLocation({ latitude: null, longitude: null });
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+      setLocation({ latitude: null, longitude: null });
+    }
+  };
 
   return (
     <GlobalContext.Provider
@@ -65,6 +97,9 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
         setLanguage,
         currency,
         setCurrency,
+        location,
+        setLocation,
+        fetchUserLocation,
       }}
     >
       {children}

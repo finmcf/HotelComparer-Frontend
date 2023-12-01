@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Suggestion } from "../../interfaces/SearchAreaInterfaces"; // Adjust the import path as needed
+import { Suggestion } from "../../interfaces/SearchAreaInterfaces";
+import { useGlobal } from "../../contexts/GlobalContext";
 
 interface LocationInputProps {
   onLocationSelect: (suggestion: Suggestion) => void;
@@ -13,24 +14,27 @@ const LocationInput: React.FC<LocationInputProps> = ({
   selectedLocation,
 }) => {
   const [input, setInput] = useState<string>("");
+  const { location } = useGlobal();
 
   const fetchSuggestions = async (keyword: string) => {
     try {
       const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
       const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
 
-      const response = await fetch(
-        `https://localhost:7033/api/Autocomplete?keyword=${encodeURIComponent(
-          keyword
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            ClientId: clientId ?? "",
-            ClientSecret: clientSecret ?? "",
-          },
-        }
-      );
+      let apiUrl = `https://localhost:7033/api/Autocomplete?keyword=${encodeURIComponent(
+        keyword
+      )}`;
+      if (location.latitude && location.longitude) {
+        apiUrl += `&latitude=${location.latitude}&longitude=${location.longitude}`;
+      }
+
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          ClientId: clientId ?? "",
+          ClientSecret: clientSecret ?? "",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(
@@ -61,7 +65,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
 
   useEffect(() => {
     if (selectedLocation) {
-      setInput(selectedLocation.name);
+      setInput(selectedLocation.name); // Make sure this aligns with the new structure
     }
   }, [selectedLocation]);
 
