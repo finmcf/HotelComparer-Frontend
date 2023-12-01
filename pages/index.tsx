@@ -39,7 +39,6 @@ const Home = () => {
           </div>
         )}
 
-        {/* Adjusted top margin for DestinationGallery */}
         <div className="mt-40">
           <DestinationGallery />
         </div>

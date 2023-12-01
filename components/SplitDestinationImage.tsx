@@ -1,23 +1,23 @@
-// SplitDestinationImage.tsx
-import React from "react";
-
+// Updated interface
 interface SplitDestinationImageProps {
-  src: string;
+  topSrc: string;
+  bottomSrc: string;
   alt: string;
 }
 
+// Updated component
 const SplitDestinationImage: React.FC<SplitDestinationImageProps> = ({
-  src,
+  topSrc,
+  bottomSrc,
   alt,
 }) => {
-  // Calculate the height for each half, accounting for the space between them
-  const halfHeight = (381 - 10) / 2; // Total height 381px, minus 10px for space, divided by 2
+  const halfHeight = (381 - 10) / 2;
 
   return (
     <div className="flex flex-col items-center w-[272.25px]">
       <div className="h-[185.5px] overflow-hidden rounded-xl">
         <img
-          src={src}
+          src={topSrc}
           alt={`${alt} - Top Half`}
           style={{
             width: "272.25px",
@@ -28,7 +28,7 @@ const SplitDestinationImage: React.FC<SplitDestinationImageProps> = ({
       </div>
       <div className="h-[185.5px] overflow-hidden rounded-xl mt-2.5">
         <img
-          src={src}
+          src={bottomSrc}
           alt={`${alt} - Bottom Half`}
           style={{
             width: "272.25px",
