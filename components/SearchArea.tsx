@@ -6,10 +6,13 @@ import SuggestionsDropdown from "./SuggestionsDropdown";
 import CalendarDropdown from "./CalendarDropdown";
 import GuestAndRoomCounterDropdown from "./GuestAndRoomCounterDropdown";
 import { Suggestion } from "../interfaces/SearchAreaInterfaces";
+import { useFetchHotelData } from "../utilities/fetchHotelData"; // Updated import
 
 type CounterFields = "rooms" | "adults" | "children";
 
 const SearchArea: React.FC = () => {
+  const fetchHotelData = useFetchHotelData(); // Initialize custom hook
+
   const router = useRouter();
   const { currency, language, setLoading } = useGlobal();
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -67,84 +70,52 @@ const SearchArea: React.FC = () => {
     }));
   }, []);
 
-  const fetchHotelData = async (
-    languageCode: string,
-    currencyCode: string,
-    setLoading: (isLoading: boolean) => void
-  ) => {
-    setLoading(true);
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+  const handleButtonClick = async () => {
+    const latitude = selectedLocation?.latitude?.toString() || "";
+    const longitude = selectedLocation?.longitude?.toString() || "";
+    const hotelIds = selectedLocation?.hotelIds || []; // Ensure it's an array
 
     try {
-      const latitude = selectedLocation?.latitude
-        ? selectedLocation.latitude.toString()
-        : "";
-      const longitude = selectedLocation?.longitude
-        ? selectedLocation.longitude.toString()
-        : "";
-      const radius = "5"; // Example radius, adjust as needed
-      const maxHotels = "10"; // Example max hotels, adjust as needed
-
-      const queryParams = new URLSearchParams({
-        CheckInDate: checkInDate ? checkInDate.toISOString().split("T")[0] : "",
-        CheckOutDate: checkOutDate
-          ? checkOutDate.toISOString().split("T")[0]
-          : "",
-        Language: languageCode,
-        Currency: currencyCode,
-        Latitude: latitude,
-        Longitude: longitude,
-        Radius: radius,
-        MaxHotels: maxHotels,
-      });
-
-      if (
-        selectedLocation &&
-        selectedLocation.hotelIds &&
-        selectedLocation.hotelIds.length > 0
-      ) {
-        queryParams.set("HotelIds", selectedLocation.hotelIds.join(","));
-      }
-
-      const response = await fetch(
-        `https://localhost:7033/api/Hotels?${queryParams.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            ClientID: clientId ?? "",
-            ClientSecret: clientSecret ?? "",
-          },
-        }
+      await fetchHotelData(
+        latitude,
+        longitude,
+        checkInDate,
+        checkOutDate,
+        hotelIds
       );
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setLoading(false);
-      router.push({
-        pathname: "/SearchResultsPage",
-        query: { data: JSON.stringify(data) },
-      });
     } catch (error) {
       console.error("Error fetching hotel data:", error);
       setLoading(false);
     }
   };
 
-  const handleButtonClick = () => {
-    fetchHotelData(language.code, currency.code, setLoading);
+  const handleImageClick = async () => {
+    const KOH_PHANGAN_LATITUDE = "41.397158";
+    const KOH_PHANGAN_LONGITUDE = "2.160873";
+
+    try {
+      await fetchHotelData(
+        KOH_PHANGAN_LATITUDE,
+        KOH_PHANGAN_LONGITUDE,
+        checkInDate,
+        checkOutDate,
+        []
+      );
+    } catch (error) {
+      console.error("Error in Koh Phangan search:", error);
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
-        className="w-full h-[300px] object-cover object-center rounded-bl-lg rounded-br-lg mx-auto max-w-[900px]"
+        className="w-full h-[300px] object-cover object-center rounded-bl-lg rounded-br-lg mx-auto max-w-[900px] cursor-pointer"
         src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Scenic View"
+        onClick={handleImageClick}
       />
+
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
         <button
           className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none"

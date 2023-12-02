@@ -20,18 +20,25 @@ type LocationInfo = {
   longitude: number | null;
 };
 
+type CountryInfo = {
+  code: string;
+  name: string;
+};
+
 type GlobalContextType = {
   isLoading: boolean;
   isModalOpen: boolean;
   language: LanguageInfo;
   currency: CurrencyInfo;
   location: LocationInfo;
+  country: CountryInfo;
   setLoading: (isLoading: boolean) => void;
   openModal: () => void;
   closeModal: () => void;
   setLanguage: (language: LanguageInfo) => void;
   setCurrency: (currency: CurrencyInfo) => void;
   setLocation: (location: LocationInfo) => void;
+  setCountry: (country: CountryInfo) => void;
   fetchUserLocation: () => void;
 };
 
@@ -45,6 +52,8 @@ const defaultCurrency: CurrencyInfo = {
   code: "USD",
   name_plural: "US dollars",
 };
+
+const defaultCountry: CountryInfo = { code: "US", name: "United States" };
 
 const GlobalContext = createContext<GlobalContextType>(null!);
 
@@ -61,6 +70,7 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
     latitude: null,
     longitude: null,
   });
+  const [country, setCountry] = useState<CountryInfo>(defaultCountry);
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -99,6 +109,8 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
         setCurrency,
         location,
         setLocation,
+        country,
+        setCountry,
         fetchUserLocation,
       }}
     >

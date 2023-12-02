@@ -2,12 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useGlobal } from "../contexts/GlobalContext";
 import currencies from "../data/currencies.json";
 import languages from "../data/languages.json";
+import countriesData from "../data/countries.json";
 
 interface CurrencyAndLanguageModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (languageCode: string, currencyCode: string) => void;
+  onSave: (
+    languageCode: string,
+    currencyCode: string,
+    countryCode: string
+  ) => void;
 }
+
+interface Countries {
+  [key: string]: string;
+}
+
+const countries: Countries = countriesData as Countries;
 
 const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
   isOpen,
@@ -17,8 +28,10 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
   const {
     setLanguage,
     setCurrency,
+    setCountry,
     language: currentLanguage,
     currency: currentCurrency,
+    country: currentCountry,
   } = useGlobal();
 
   const [selectedLanguageCode, setSelectedLanguageCode] = useState<string>(
@@ -27,11 +40,15 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<string>(
     currentCurrency.code
   );
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string>(
+    currentCountry.code
+  );
 
   useEffect(() => {
     setSelectedLanguageCode(currentLanguage.code);
     setSelectedCurrencyCode(currentCurrency.code);
-  }, [currentLanguage, currentCurrency]);
+    setSelectedCountryCode(currentCountry.code);
+  }, [currentLanguage, currentCurrency, currentCountry]);
 
   const handleSave = () => {
     const selectedLanguage = Object.values(languages).find(
@@ -40,11 +57,13 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
     const selectedCurrency = Object.values(currencies).find(
       (curr) => curr.code === selectedCurrencyCode
     );
+    const selectedCountryName = countries[selectedCountryCode];
 
-    if (selectedLanguage && selectedCurrency) {
+    if (selectedLanguage && selectedCurrency && selectedCountryName) {
       setLanguage(selectedLanguage);
       setCurrency(selectedCurrency);
-      onSave(selectedLanguage.code, selectedCurrency.code);
+      setCountry({ code: selectedCountryCode, name: selectedCountryName });
+      onSave(selectedLanguage.code, selectedCurrency.code, selectedCountryCode);
     }
     onClose();
   };
@@ -106,6 +125,27 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
               {Object.values(currencies).map((curr) => (
                 <option key={curr.code} value={curr.code}>
                   {curr.name} ({curr.symbol_native})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mt-4">
+            <label
+              htmlFor="country"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Country
+            </label>
+            <select
+              id="country"
+              name="country"
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              value={selectedCountryCode}
+              onChange={(e) => setSelectedCountryCode(e.target.value)}
+            >
+              {Object.entries(countries).map(([code, name]) => (
+                <option key={code} value={code}>
+                  {name}
                 </option>
               ))}
             </select>
