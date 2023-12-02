@@ -27,7 +27,7 @@ export const useFetchHotelData = () => {
       Latitude: latitude,
       Longitude: longitude,
       Radius: "5", // You might want to adjust this value
-      MaxHotels: "10", // You might want to adjust this value
+      MaxHotels: "2", // You might want to adjust this value
     });
 
     if (hotelIds.length > 0) {

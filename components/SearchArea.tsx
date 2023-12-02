@@ -90,8 +90,8 @@ const SearchArea: React.FC = () => {
   };
 
   const handleImageClick = async () => {
-    const KOH_PHANGAN_LATITUDE = "41.397158";
-    const KOH_PHANGAN_LONGITUDE = "2.160873";
+    const KOH_PHANGAN_LATITUDE = "51.50966";
+    const KOH_PHANGAN_LONGITUDE = "-0.15548";
 
     try {
       await fetchHotelData(
