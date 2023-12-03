@@ -12,29 +12,30 @@ export const useFetchHotelData = () => {
     checkOutDate: Date | null = null,
     hotelIds: string[] = []
   ) => {
-    setLoading(true);
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
-
-    const queryParams = new URLSearchParams({
-      CheckInDate: checkInDate ? checkInDate.toISOString().split("T")[0] : "",
-      CheckOutDate: checkOutDate
-        ? checkOutDate.toISOString().split("T")[0]
-        : "",
-      Language: language.code,
-      Currency: currency.code,
-      CountryOfResidence: country.code,
-      Latitude: latitude,
-      Longitude: longitude,
-      Radius: "5", // You might want to adjust this value
-      MaxHotels: "2", // You might want to adjust this value
-    });
-
-    if (hotelIds.length > 0) {
-      queryParams.set("HotelIds", hotelIds.join(","));
-    }
+    setLoading(true); // Start loading
 
     try {
+      const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+      const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+
+      const queryParams = new URLSearchParams({
+        CheckInDate: checkInDate ? checkInDate.toISOString().split("T")[0] : "",
+        CheckOutDate: checkOutDate
+          ? checkOutDate.toISOString().split("T")[0]
+          : "",
+        Language: language.code,
+        Currency: currency.code,
+        CountryOfResidence: country.code,
+        Latitude: latitude,
+        Longitude: longitude,
+        Radius: "5",
+        MaxHotels: "2",
+      });
+
+      if (hotelIds.length > 0) {
+        queryParams.set("HotelIds", hotelIds.join(","));
+      }
+
       const response = await fetch(
         `https://localhost:7033/api/Hotels?${queryParams.toString()}`,
         {
@@ -51,7 +52,6 @@ export const useFetchHotelData = () => {
       }
 
       const data = await response.json();
-      setLoading(false);
 
       // Navigate to the search results page
       router.push({
@@ -62,8 +62,9 @@ export const useFetchHotelData = () => {
       return data;
     } catch (error) {
       console.error("Error fetching hotel data:", error);
-      setLoading(false);
       throw error;
+    } finally {
+      setLoading(false); // Stop loading regardless of the result
     }
   };
 

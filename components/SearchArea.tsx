@@ -70,56 +70,50 @@ const SearchArea: React.FC = () => {
     }));
   }, []);
 
-  const handleButtonClick = async () => {
-    const latitude = selectedLocation?.latitude?.toString() || "";
-    const longitude = selectedLocation?.longitude?.toString() || "";
-    const hotelIds = selectedLocation?.hotelIds || []; // Ensure it's an array
-
-    try {
-      await fetchHotelData(
-        latitude,
-        longitude,
-        checkInDate,
-        checkOutDate,
-        hotelIds
-      );
-    } catch (error) {
-      console.error("Error fetching hotel data:", error);
-      setLoading(false);
-    }
-  };
-
-  const handleImageClick = async () => {
-    const KOH_PHANGAN_LATITUDE = "51.50966";
-    const KOH_PHANGAN_LONGITUDE = "-0.15548";
-
-    try {
-      await fetchHotelData(
-        KOH_PHANGAN_LATITUDE,
-        KOH_PHANGAN_LONGITUDE,
-        checkInDate,
-        checkOutDate,
-        []
-      );
-    } catch (error) {
-      console.error("Error in Koh Phangan search:", error);
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
         className="w-full h-[300px] object-cover object-center rounded-bl-lg rounded-br-lg mx-auto max-w-[900px] cursor-pointer"
         src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Scenic View"
-        onClick={handleImageClick}
+        onClick={async () => {
+          const latitude = "51.50966"; // Example latitude
+          const longitude = "-0.15548"; // Example longitude
+
+          try {
+            await fetchHotelData(
+              latitude,
+              longitude,
+              checkInDate,
+              checkOutDate,
+              [] // No specific hotelIds needed for this search
+            );
+          } catch (error) {
+            console.error("Error in image search:", error);
+          }
+        }}
       />
 
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
         <button
           className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none"
-          onClick={handleButtonClick}
+          onClick={async () => {
+            const latitude = selectedLocation?.latitude?.toString() || "";
+            const longitude = selectedLocation?.longitude?.toString() || "";
+            const hotelIds = selectedLocation?.hotelIds || []; // Use hotelIds from the selected location
+
+            try {
+              await fetchHotelData(
+                latitude,
+                longitude,
+                checkInDate,
+                checkOutDate,
+                hotelIds
+              );
+            } catch (error) {
+              console.error("Error fetching hotel data:", error);
+            }
+          }}
         >
           <span className="text-black">&#x2192;</span>
         </button>
