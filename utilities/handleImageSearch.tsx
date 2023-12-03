@@ -1,39 +1,65 @@
-// handleImageSearch.tsx
+import { useRouter } from "next/router";
+import { useGlobal } from "../contexts/GlobalContext";
 
-import { useFetchHotelData } from "../utilities/fetchHotelData"; // Update the import path as necessary
-import { useGlobal } from "../contexts/GlobalContext"; // Import the useGlobal hook
+// Custom hook
+export const useImageSearch = () => {
+  const router = useRouter();
+  const { currency, language, country, setLoading } = useGlobal();
 
-type HandleImageSearchProps = {
-  latitude: string;
-  longitude: string;
-  checkInDate: Date | null;
-  checkOutDate: Date | null;
-};
+  // Function returned by the hook
+  const imageSearch = async (event: React.MouseEvent<HTMLImageElement>) => {
+    const image = event.currentTarget;
+    const latitude = image.dataset.latitude;
+    const longitude = image.dataset.longitude;
 
-export const handleImageSearch = async ({
-  latitude,
-  longitude,
-  checkInDate,
-  checkOutDate,
-}: HandleImageSearchProps) => {
-  const fetchHotelData = useFetchHotelData(); // Initialize custom hook
-  const { setLoading } = useGlobal(); // Use the global context
+    let checkInDate = new Date();
+    let checkOutDate = new Date(checkInDate.getTime());
+    checkOutDate.setDate(checkOutDate.getDate() + 1);
 
-  try {
-    setLoading(true); // Start loading
-    const data = await fetchHotelData(
-      latitude,
-      longitude,
-      checkInDate,
-      checkOutDate,
-      [] // Assuming no specific hotelIds are needed for this search
-    );
-    // Handle the fetched data as needed
-    setLoading(false); // Stop loading
-    return data; // Return the fetched data
-  } catch (error) {
-    console.error("Error in image search:", error);
-    setLoading(false); // Stop loading in case of error
-    throw error; // Rethrow the error for further handling
-  }
+    setLoading(true);
+
+    try {
+      const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+      const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+
+      const queryParams = new URLSearchParams({
+        CheckInDate: checkInDate.toISOString().split("T")[0],
+        CheckOutDate: checkOutDate.toISOString().split("T")[0],
+        Language: language.code,
+        Currency: currency.code,
+        CountryOfResidence: country.code,
+        Latitude: latitude || "",
+        Longitude: longitude || "",
+        Radius: "5",
+        MaxHotels: "2",
+      });
+
+      const response = await fetch(
+        `https://localhost:7033/api/Hotels?${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            ClientID: clientId ?? "",
+            ClientSecret: clientSecret ?? "",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      router.push({
+        pathname: "/SearchResultsPage",
+        query: { data: JSON.stringify(data) },
+      });
+    } catch (error) {
+      console.error("Error in image search:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return imageSearch;
 };

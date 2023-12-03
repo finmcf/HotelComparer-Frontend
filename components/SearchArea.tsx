@@ -7,11 +7,13 @@ import CalendarDropdown from "./CalendarDropdown";
 import GuestAndRoomCounterDropdown from "./GuestAndRoomCounterDropdown";
 import { Suggestion } from "../interfaces/SearchAreaInterfaces";
 import { useFetchHotelData } from "../utilities/fetchHotelData"; // Updated import
+import { useImageSearch } from "../utilities/handleImageSearch"; // Adjust the path as necessary
 
 type CounterFields = "rooms" | "adults" | "children";
 
 const SearchArea: React.FC = () => {
   const fetchHotelData = useFetchHotelData(); // Initialize custom hook
+  const imageSearch = useImageSearch();
 
   const router = useRouter();
   const { currency, language, setLoading } = useGlobal();
@@ -76,44 +78,23 @@ const SearchArea: React.FC = () => {
         className="w-full h-[300px] object-cover object-center rounded-bl-lg rounded-br-lg mx-auto max-w-[900px] cursor-pointer"
         src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Scenic View"
-        onClick={async () => {
-          const latitude = "51.50966"; // Example latitude
-          const longitude = "-0.15548"; // Example longitude
-
-          try {
-            await fetchHotelData(
-              latitude,
-              longitude,
-              checkInDate,
-              checkOutDate,
-              [] // No specific hotelIds needed for this search
-            );
-          } catch (error) {
-            console.error("Error in image search:", error);
-          }
-        }}
+        data-latitude="51.50966" // Example latitude
+        data-longitude="-0.15548" // Example longitude
+        onClick={(event) => imageSearch(event)}
       />
 
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">
         <button
           className="w-[51px] h-[51px] left-[663px] top-[8px] absolute bg-white rounded-full flex justify-center items-center focus:outline-none"
-          onClick={async () => {
-            const latitude = selectedLocation?.latitude?.toString() || "";
-            const longitude = selectedLocation?.longitude?.toString() || "";
-            const hotelIds = selectedLocation?.hotelIds || []; // Use hotelIds from the selected location
-
-            try {
-              await fetchHotelData(
-                latitude,
-                longitude,
-                checkInDate,
-                checkOutDate,
-                hotelIds
-              );
-            } catch (error) {
-              console.error("Error fetching hotel data:", error);
-            }
-          }}
+          onClick={() =>
+            fetchHotelData(
+              selectedLocation?.latitude?.toString() || "",
+              selectedLocation?.longitude?.toString() || "",
+              checkInDate,
+              checkOutDate,
+              selectedLocation?.hotelIds || [] // Use hotelIds from the selected location
+            )
+          }
         >
           <span className="text-black">&#x2192;</span>
         </button>
