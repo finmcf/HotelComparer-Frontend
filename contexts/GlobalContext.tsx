@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 
+// Types for various pieces of global state
 type CurrencyInfo = {
   symbol: string;
   name: string;
@@ -32,6 +33,8 @@ type GlobalContextType = {
   currency: CurrencyInfo;
   location: LocationInfo;
   country: CountryInfo;
+  checkInDate: Date | null;
+  checkOutDate: Date | null;
   setLoading: (isLoading: boolean) => void;
   openModal: () => void;
   closeModal: () => void;
@@ -39,9 +42,12 @@ type GlobalContextType = {
   setCurrency: (currency: CurrencyInfo) => void;
   setLocation: (location: LocationInfo) => void;
   setCountry: (country: CountryInfo) => void;
+  setCheckInDate: (date: Date | null) => void;
+  setCheckOutDate: (date: Date | null) => void;
   fetchUserLocation: () => void;
 };
 
+// Default values for context state
 const defaultLanguage: LanguageInfo = { code: "en", name: "English" };
 const defaultCurrency: CurrencyInfo = {
   symbol: "$",
@@ -52,13 +58,20 @@ const defaultCurrency: CurrencyInfo = {
   code: "USD",
   name_plural: "US dollars",
 };
-
 const defaultCountry: CountryInfo = { code: "US", name: "United States" };
 
+// Default check-in and check-out dates
+const defaultCheckInDate = new Date(); // Today's date
+const defaultCheckOutDate = new Date();
+defaultCheckOutDate.setDate(defaultCheckOutDate.getDate() + 1); // Tomorrow's date
+
+// Creating the context
 const GlobalContext = createContext<GlobalContextType>(null!);
 
+// Custom hook for consuming the context
 export const useGlobal = () => useContext(GlobalContext);
 
+// Provider component
 export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -71,6 +84,12 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
     longitude: null,
   });
   const [country, setCountry] = useState<CountryInfo>(defaultCountry);
+  const [checkInDate, setCheckInDate] = useState<Date | null>(
+    defaultCheckInDate
+  );
+  const [checkOutDate, setCheckOutDate] = useState<Date | null>(
+    defaultCheckOutDate
+  );
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -111,6 +130,10 @@ export const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
         setLocation,
         country,
         setCountry,
+        checkInDate,
+        checkOutDate,
+        setCheckInDate,
+        setCheckOutDate,
         fetchUserLocation,
       }}
     >
