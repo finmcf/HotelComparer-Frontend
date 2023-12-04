@@ -10,7 +10,14 @@ import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
 
 const SearchResults: NextPage = () => {
   const router = useRouter();
-  const { isModalOpen, openModal, closeModal } = useGlobal();
+  const {
+    isModalOpen,
+    openModal,
+    closeModal,
+    setLanguage,
+    setCurrency,
+    setCountry,
+  } = useGlobal();
   const [hotelData, setHotelData] = useState(null);
 
   useEffect(() => {
@@ -20,13 +27,32 @@ const SearchResults: NextPage = () => {
         setHotelData(data);
       } catch (error) {
         console.error("Error parsing hotel data:", error);
-        // Handle error or set default state
       }
     }
   }, [router.query]);
 
   const handleCurrencyOrFlagClick = () => {
     openModal();
+  };
+
+  const handleSave = (
+    languageCode: string,
+    currencyCode: string,
+    countryCode: string
+  ) => {
+    // Find the selected language, currency, and country based on the codes
+    // Assuming you have a way to find these based on their codes
+    const selectedLanguage = { code: languageCode, name: "Language Name" }; // Replace with actual data
+    const selectedCurrency = {
+      code: currencyCode,
+      name: "Currency Name" /* other properties */,
+    }; // Replace with actual data
+    const selectedCountry = { code: countryCode, name: "Country Name" }; // Replace with actual data
+
+    setLanguage(selectedLanguage);
+    setCurrency(selectedCurrency);
+    setCountry(selectedCountry);
+    closeModal();
   };
 
   return (
@@ -47,7 +73,11 @@ const SearchResults: NextPage = () => {
         <WebsiteInfoFooter />
       </div>
       {isModalOpen && (
-        <CurrencyAndLanguageModal isOpen={isModalOpen} onClose={closeModal} />
+        <CurrencyAndLanguageModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onSave={handleSave}
+        />
       )}
     </>
   );

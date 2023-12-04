@@ -18,11 +18,11 @@ const SplitDestinationImage: React.FC<SplitDestinationImageProps> = ({
   bottomImage,
   onImageClick,
 }) => {
-  const halfHeight = (381 - 10) / 2;
+  const halfHeight = (381 - 10) / 2; // Calculate height for each image
 
   return (
-    <div className="flex flex-col items-center w-[272.25px] ">
-      <div className="h-[185.5px] overflow-hidden rounded-xl cursor-pointer">
+    <div className="flex flex-col items-center w-[272.25px]">
+      <div className="relative h-[185.5px] overflow-hidden rounded-xl cursor-pointer">
         <img
           src={topImage.src}
           alt={`${topImage.city} - Top`}
@@ -35,8 +35,15 @@ const SplitDestinationImage: React.FC<SplitDestinationImageProps> = ({
           data-longitude={topImage.longitude}
           onClick={onImageClick}
         />
+
+        <div className="absolute bottom-2.5 left-2.5 min-w-[110px] h-[32px] flex justify-center items-center bg-black bg-opacity-75 rounded-xl px-2">
+          <span className="text-white text-s font-normal font-sans">
+            {topImage.city}
+          </span>
+        </div>
       </div>
-      <div className="h-[185.5px] overflow-hidden rounded-xl mt-2.5 cursor-pointer">
+
+      <div className="relative h-[185.5px] overflow-hidden rounded-xl mt-2.5 cursor-pointer">
         <img
           src={bottomImage.src}
           alt={`${bottomImage.city} - Bottom`}
@@ -49,6 +56,12 @@ const SplitDestinationImage: React.FC<SplitDestinationImageProps> = ({
           data-longitude={bottomImage.longitude}
           onClick={onImageClick}
         />
+
+        <div className="absolute bottom-2.5 left-2.5 min-w-[110px] h-[32px] flex justify-center items-center bg-black bg-opacity-75 rounded-xl px-2">
+          <span className="text-white text-s font-normal font-sans">
+            {bottomImage.city}
+          </span>
+        </div>
       </div>
     </div>
   );
