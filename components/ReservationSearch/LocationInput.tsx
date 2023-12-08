@@ -78,6 +78,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
         value={input}
         onChange={(e) => setInput(e.target.value)}
         autoComplete="off"
+        spellCheck="false"
       />
     </div>
   );

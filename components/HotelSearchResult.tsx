@@ -3,8 +3,8 @@ import HotelResult from "./HotelResult"; // Import the HotelResult component
 
 const HotelSearchResults = () => {
   return (
-    <div className="flex-1 h-[690px] flex justify-center items-start bg-stone-400">
-      <div className="w-[441px] pl-[17px] pr-[283px] pt-3 pb-[11px] absolute top-[32px] bg-white justify-start items-center inline-flex">
+    <div className="flex-1 h-[690px] flex justify-center items-start bg-white">
+      <div className="w-[441px] pl-[17px] pr-[283px] pt-3 pb-[11px] absolute top-[32px] bg-stone-400 justify-start items-center inline-flex">
         <div className="text-black text-xs font-normal font-['Inter']">
           London, December 9-12
         </div>
