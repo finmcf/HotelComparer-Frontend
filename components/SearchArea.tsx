@@ -6,14 +6,12 @@ import SuggestionsDropdown from "./SuggestionsDropdown";
 import CalendarDropdown from "./CalendarDropdown";
 import GuestAndRoomCounterDropdown from "./GuestAndRoomCounterDropdown";
 import { Suggestion } from "../interfaces/SearchAreaInterfaces";
-import { useFetchHotelData } from "../utilities/fetchHotelData"; // Updated import
-import { useImageSearch } from "../utilities/handleImageSearch"; // Adjust the path as necessary
+import { useFetchHotelData } from "../utilities/fetchHotelData";
 
 type CounterFields = "rooms" | "adults" | "children";
 
 const SearchArea: React.FC = () => {
-  const fetchHotelData = useFetchHotelData(); // Initialize custom hook
-  const imageSearch = useImageSearch();
+  const fetchHotelData = useFetchHotelData();
 
   const router = useRouter();
   const { currency, language, setLoading } = useGlobal();
@@ -72,15 +70,31 @@ const SearchArea: React.FC = () => {
     }));
   }, []);
 
+  const handleImageClick = async () => {
+    try {
+      const specificCheckInDate = new Date("2024-02-21");
+      const specificCheckOutDate = new Date("2024-02-26");
+
+      await fetchHotelData(
+        "10.776889", // latitude
+        "106.70080", // longitude
+        specificCheckInDate,
+        specificCheckOutDate,
+        [], // hotelIds
+        true // useTestData set to true
+      );
+    } catch (error) {
+      console.error("Error in image click search:", error);
+    }
+  };
+
   return (
     <div className="w-full h-[238px] relative flex-col justify-start items-start">
       <img
         className="w-full h-[300px] object-cover object-center rounded-bl-lg rounded-br-lg mx-auto max-w-[900px] cursor-pointer"
         src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="Scenic View"
-        data-latitude="51.50966" // Example latitude
-        data-longitude="-0.15548" // Example longitude
-        onClick={(event) => imageSearch(event)}
+        onClick={handleImageClick}
       />
 
       <div className="w-full max-w-[755px] h-[66px] bg-neutral-100 rounded-[50px] relative mx-auto mt-[-33px]">

@@ -27,7 +27,7 @@ const SuggestionsDropdown: React.FC<SuggestionsDropdownProps> = ({
   };
 
   return (
-    <div className="w-[221px] h-[135px] bg-white rounded-[20px] overflow-auto">
+    <div className="w-[221px] h-[135px] bg-white rounded-[20px] overflow-auto z-50">
       {suggestions.map((suggestion) => (
         <div
           key={suggestion.id}

@@ -10,7 +10,8 @@ export const useFetchHotelData = () => {
     longitude: string = "",
     checkInDate: Date | null = null,
     checkOutDate: Date | null = null,
-    hotelIds: string[] = []
+    hotelIds: string[] = [],
+    useTestData: boolean = false // Added useTestData as an optional parameter
   ) => {
     setLoading(true); // Start loading
 
@@ -30,6 +31,7 @@ export const useFetchHotelData = () => {
         Longitude: longitude,
         Radius: "5",
         MaxHotels: "2",
+        UseTestData: useTestData ? "true" : "false", // Include UseTestData in the query
       });
 
       if (hotelIds.length > 0) {
@@ -62,7 +64,6 @@ export const useFetchHotelData = () => {
       return data;
     } catch (error) {
       console.error("Error fetching hotel data:", error);
-      // Optional: You can handle the error here instead of rethrowing
       throw error;
     } finally {
       setLoading(false); // Stop loading regardless of the result
