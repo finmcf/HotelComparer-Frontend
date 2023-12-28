@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useGlobal } from "../contexts/GlobalContext";
 import currencies from "../data/currencies.json";
 import languages from "../data/languages.json";
@@ -44,11 +44,32 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
     currentCountry.code
   );
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setSelectedLanguageCode(currentLanguage.code);
     setSelectedCurrencyCode(currentCurrency.code);
     setSelectedCountryCode(currentCountry.code);
   }, [currentLanguage, currentCurrency, currentCountry]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   const handleSave = () => {
     const selectedLanguage = Object.values(languages).find(
@@ -74,7 +95,10 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
         !isOpen && "hidden"
       }`}
     >
-      <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div
+        ref={modalRef}
+        className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
+      >
         <div className="mt-3 text-center">
           <h3
             className="text-lg leading-6 font-medium text-gray-900"
