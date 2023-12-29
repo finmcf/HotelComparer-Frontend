@@ -1,13 +1,57 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { GlobalProvider } from "../contexts/GlobalContext"; // Import the UIProvider
+import { GlobalProvider, useGlobal } from "../contexts/GlobalContext";
+import NavBar from "../components/NavBar";
+import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
+import { BeatLoader } from "react-spinners";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <GlobalProvider>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </GlobalProvider>
   );
 }
+
+// Layout component to include NavBar, CurrencyAndLanguageModal, and BeatLoader
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isLoading, isModalOpen, closeModal, openModal } = useGlobal();
+
+  const handleCurrencyAndLanguageSave = (
+    language: string,
+    currency: string
+  ) => {
+    console.log(`Language: ${language}, Currency: ${currency}`);
+    closeModal();
+  };
+
+  const handleCurrencyOrFlagClick = () => {
+    openModal();
+  };
+
+  return (
+    <>
+      <NavBar
+        onCurrencyClick={handleCurrencyOrFlagClick}
+        onFlagClick={handleCurrencyOrFlagClick}
+      />
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+          <BeatLoader color="#FFFFFF" />
+        </div>
+      )}
+      {children}
+      {isModalOpen && (
+        <CurrencyAndLanguageModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onSave={handleCurrencyAndLanguageSave}
+        />
+      )}
+    </>
+  );
+};
 
 export default MyApp;

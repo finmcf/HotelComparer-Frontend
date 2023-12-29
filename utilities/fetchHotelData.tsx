@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useGlobal } from "../contexts/GlobalContext";
+import { HotelData } from "../interfaces/HotelDataInterface";
 
 export const useFetchHotelData = () => {
   const router = useRouter();
@@ -11,9 +12,9 @@ export const useFetchHotelData = () => {
     checkInDate: Date | null = null,
     checkOutDate: Date | null = null,
     hotelIds: string[] = [],
-    useTestData: boolean = false // Added useTestData as an optional parameter
+    useTestData: boolean = false
   ) => {
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -31,7 +32,7 @@ export const useFetchHotelData = () => {
         Longitude: longitude,
         Radius: "5",
         MaxHotels: "2",
-        UseTestData: useTestData ? "true" : "false", // Include UseTestData in the query
+        UseTestData: useTestData ? "true" : "false",
       });
 
       if (hotelIds.length > 0) {
@@ -53,9 +54,8 @@ export const useFetchHotelData = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: HotelData[] = await response.json(); // Typing the response data
 
-      // Navigate to the search results page
       router.push({
         pathname: "/SearchResultsPage",
         query: { data: JSON.stringify(data) },
@@ -66,7 +66,7 @@ export const useFetchHotelData = () => {
       console.error("Error fetching hotel data:", error);
       throw error;
     } finally {
-      setLoading(false); // Stop loading regardless of the result
+      setLoading(false);
     }
   };
 
