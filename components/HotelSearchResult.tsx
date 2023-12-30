@@ -1,16 +1,19 @@
 import React from "react";
-import HotelResult from "./HotelResult"; // Import the HotelResult component
+import HotelResult from "./HotelResult";
+import { HotelData } from "../interfaces/HotelDataInterface";
 
-const HotelSearchResults = () => {
+const HotelSearchResults: React.FC<{ data: HotelData[] | null }> = ({
+  data,
+}) => {
+  if (!data || data.length === 0) {
+    return <div>No hotels available or still loading...</div>;
+  }
+
   return (
-    <div className="flex-1 h-[690px] flex justify-center items-start bg-white">
-      <div className="w-[441px] pl-[17px] pr-[283px] pt-3 pb-[11px] absolute top-[32px] bg-stone-400 justify-start items-center inline-flex">
-        <div className="text-black text-xs font-normal font-['Inter']">
-          London, December 9-12
-        </div>
-      </div>
-      <div className="w-[99px] h-[38px] right-[54px] top-[32px] absolute bg-zinc-300 rounded-[20px]" />
-      <HotelResult />
+    <div className="flex-1 h-[690px] flex flex-col items-center bg-white overflow-y-auto">
+      {data.map((hotel) => (
+        <HotelResult key={hotel.hotel.hotelId} hotelData={hotel} />
+      ))}
     </div>
   );
 };

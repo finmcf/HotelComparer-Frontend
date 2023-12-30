@@ -15,7 +15,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-// Layout component to include NavBar, CurrencyAndLanguageModal, and BeatLoader
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isLoading, isModalOpen, closeModal, openModal } = useGlobal();
 
