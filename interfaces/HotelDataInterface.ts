@@ -77,6 +77,8 @@ export interface HotelData {
   hotel: Hotel;
   offers: Offer[];
   cheapestCombination: number;
+  cheapestBasePrice: number; // Added new field for the cheapest base price
+  cheapestCombinationCurrency: string; // Added new field for the currency of the cheapest combination
   cheapestOfferIds: string[];
   self: string;
 }

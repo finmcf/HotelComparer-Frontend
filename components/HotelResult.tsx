@@ -29,7 +29,10 @@ const HotelResult: React.FC<HotelResultProps> = ({ hotelData }) => {
           </span>
         </div>
 
-        <button className="px-[11px] py-[9px] bg-green-400 rounded-[20px] text-xs text-black font-normal">
+        <button
+          className="w-[150px] h-[35px] bg-green-400 rounded-[20px] text-xs text-black font-normal"
+          style={{ flexShrink: 0, flexGrow: 0 }}
+        >
           View Booking Options
         </button>
       </div>
