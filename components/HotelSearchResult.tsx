@@ -1,3 +1,4 @@
+// HotelSearchResults.jsx
 import React from "react";
 import HotelResult from "./HotelResult";
 import { HotelData } from "../interfaces/HotelDataInterface";
@@ -10,7 +11,7 @@ const HotelSearchResults: React.FC<{ data: HotelData[] | null }> = ({
   }
 
   return (
-    <div className="flex-1 h-[690px] flex flex-col items-center bg-white overflow-y-auto">
+    <div className="flex-1 flex flex-col items-center bg-white">
       {data.map((hotel) => (
         <HotelResult key={hotel.hotel.hotelId} hotelData={hotel} />
       ))}
