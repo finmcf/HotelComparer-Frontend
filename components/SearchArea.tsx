@@ -7,6 +7,7 @@ import CalendarDropdown from "./CalendarDropdown";
 import GuestAndRoomCounterDropdown from "./GuestAndRoomCounterDropdown";
 import { Suggestion } from "../interfaces/SearchAreaInterfaces";
 import { useFetchHotelData } from "../utilities/fetchHotelData";
+import currencies from "../data/currencies.json";
 
 type CounterFields = "rooms" | "adults" | "children";
 
@@ -14,7 +15,8 @@ const SearchArea: React.FC = () => {
   const fetchHotelData = useFetchHotelData();
 
   const router = useRouter();
-  const { currency, language, setLoading } = useGlobal();
+  const { currency, language, setLoading, setCurrency } = useGlobal();
+
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Suggestion | null>(
     null
@@ -72,6 +74,11 @@ const SearchArea: React.FC = () => {
 
   const handleImageClick = async () => {
     try {
+      const usdCurrency = currencies["USD"];
+      if (usdCurrency) {
+        setCurrency(usdCurrency);
+      }
+
       const specificCheckInDate = new Date("2024-02-21");
       const specificCheckOutDate = new Date("2024-02-26");
 
