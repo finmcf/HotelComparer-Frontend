@@ -1,5 +1,6 @@
 import React from "react";
 import { HotelData } from "../interfaces/HotelDataInterface";
+import { useGlobal } from "../contexts/GlobalContext"; // Import useGlobal hook
 
 interface HotelResultProps {
   hotelData: HotelData;
@@ -8,6 +9,9 @@ interface HotelResultProps {
 const HotelResult: React.FC<HotelResultProps> = ({ hotelData }) => {
   const { hotel, offers } = hotelData;
   const firstOffer = offers[0];
+
+  // Use useGlobal hook to access the current currency
+  const { currency } = useGlobal(); // Destructure to get the currency object
 
   return (
     <div className="w-[95%] h-[167px] mx-auto mt-[15px] bg-[#f1f1f1] rounded-[20px] relative flex">
@@ -23,7 +27,8 @@ const HotelResult: React.FC<HotelResultProps> = ({ hotelData }) => {
         </div>
 
         <div className="text-black text-base font-normal">
-          ${firstOffer.price.total}
+          {currency.symbol}
+          {firstOffer.price.total}{" "}
           <span className="text-[10px] ml-2">
             {firstOffer.guests.adults} Guest(s)
           </span>
