@@ -1,5 +1,12 @@
-import { CurrencyInfo } from "../contexts/GlobalContext"; // Update the import path as needed
-import currencies from "../data/currencies.json";
+// In your fetchAndUpdateCurrencyRates file
+import { CurrencyInfo, CurrencyDetails } from "../contexts/GlobalContext"; // Update the import path as needed
+import rawCurrencies from "../data/currencies.json";
+
+type Currencies = {
+  [key: string]: CurrencyDetails;
+};
+
+const currencies: Currencies = rawCurrencies as Currencies;
 
 interface ApiResponse {
   rate: number;
@@ -12,8 +19,8 @@ const fetchAndUpdateCurrencyRates = async (
   setCurrency: (currency: CurrencyInfo) => void
 ): Promise<void> => {
   try {
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string; // Type assertion for environment variables
-    const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET as string; // Type assertion for environment variables
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string;
+    const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET as string;
 
     const response = await fetch(
       `https://localhost:7033/api/CurrencyExchange?baseCurrency=${baseCurrencyCode}&targetCurrency=${targetCurrencyCode}`,
@@ -30,9 +37,9 @@ const fetchAndUpdateCurrencyRates = async (
     }
 
     const data: ApiResponse = await response.json();
-    const targetCurrencyInfo = currencies[targetCurrencyCode];
+    const targetCurrencyDetails = currencies[targetCurrencyCode];
 
-    if (!targetCurrencyInfo) {
+    if (!targetCurrencyDetails) {
       throw new Error("Currency code not found in the data");
     }
 
@@ -44,7 +51,7 @@ const fetchAndUpdateCurrencyRates = async (
     };
 
     setCurrency({
-      ...targetCurrencyInfo,
+      details: targetCurrencyDetails,
       exchangeRate: exchangeRateInfo,
     });
   } catch (error) {

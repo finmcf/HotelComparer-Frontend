@@ -26,7 +26,7 @@ export const useFetchHotelData = () => {
           ? checkOutDate.toISOString().split("T")[0]
           : "",
         Language: language.code,
-        Currency: currency.code,
+        Currency: currency.details.code, // Adjusted to access the code from the details object
         CountryOfResidence: country.code,
         Latitude: latitude,
         Longitude: longitude,
@@ -54,7 +54,7 @@ export const useFetchHotelData = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data: HotelData[] = await response.json(); // Typing the response data
+      const data: HotelData[] = await response.json();
 
       router.push({
         pathname: "/SearchResultsPage",

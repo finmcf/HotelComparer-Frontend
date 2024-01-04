@@ -25,7 +25,7 @@ const NavBar: React.FC<NavBarProps> = ({ onCurrencyClick, onFlagClick }) => {
           className="w-[21px] h-[21px] flex justify-center items-center bg-white rounded-full text-black text-xs font-normal focus:outline-none"
           onClick={onCurrencyClick}
         >
-          {currency.symbol_native}
+          {currency.details.symbol_native}
         </button>
         <div className="w-[68px] h-[21px] flex justify-center items-center bg-white rounded-[10px] text-black text-xs font-normal cursor-pointer">
           Sign Up

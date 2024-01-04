@@ -2,6 +2,16 @@ import React, { createContext, useState, useContext } from "react";
 
 // Types for various pieces of global state
 
+export type CurrencyDetails = {
+  symbol: string;
+  name: string;
+  symbol_native: string;
+  decimal_digits: number;
+  rounding: number;
+  code: string;
+  name_plural: string;
+};
+
 export type ExchangeRateInfo = {
   baseCurrency: string;
   targetCurrency: string;
@@ -10,13 +20,7 @@ export type ExchangeRateInfo = {
 };
 
 export type CurrencyInfo = {
-  symbol: string;
-  name: string;
-  symbol_native: string;
-  decimal_digits: number;
-  rounding: number;
-  code: string;
-  name_plural: string;
+  details: CurrencyDetails;
   exchangeRate?: ExchangeRateInfo;
 };
 
@@ -58,7 +62,7 @@ type GlobalContextType = {
 
 // Default values for context state
 const defaultLanguage: LanguageInfo = { code: "en", name: "English" };
-const defaultCurrency: CurrencyInfo = {
+const defaultCurrencyDetails: CurrencyDetails = {
   symbol: "$",
   name: "US Dollar",
   symbol_native: "$",
@@ -67,6 +71,14 @@ const defaultCurrency: CurrencyInfo = {
   code: "USD",
   name_plural: "US dollars",
 };
+
+const defaultCurrency: CurrencyInfo = {
+  details: defaultCurrencyDetails,
+  exchangeRate: undefined, // As exchange rate might not be available initially
+};
+
+// In GlobalProvider
+
 const defaultCountry: CountryInfo = { code: "US", name: "United States" };
 
 // Default check-in and check-out dates

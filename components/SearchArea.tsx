@@ -8,6 +8,7 @@ import GuestAndRoomCounterDropdown from "./GuestAndRoomCounterDropdown";
 import { Suggestion } from "../interfaces/SearchAreaInterfaces";
 import { useFetchHotelData } from "../utilities/fetchHotelData";
 import currencies from "../data/currencies.json";
+import fetchAndUpdateCurrencyRates from "../utilities/fetchAndUpdateCurrencyRates";
 
 type CounterFields = "rooms" | "adults" | "children";
 
@@ -74,14 +75,19 @@ const SearchArea: React.FC = () => {
 
   const handleImageClick = async () => {
     try {
-      const usdCurrency = currencies["USD"];
-      if (usdCurrency) {
-        setCurrency(usdCurrency);
-      }
+      // Example: setting the currency to USD
+      const newCurrencyCode = "USD";
+      const currentCurrencyCode = currency.details.code;
+      await fetchAndUpdateCurrencyRates(
+        currentCurrencyCode,
+        newCurrencyCode,
+        setCurrency
+      );
 
       const specificCheckInDate = new Date("2024-02-21");
       const specificCheckOutDate = new Date("2024-02-26");
 
+      // Assuming you have the latitude and longitude hardcoded for this example
       await fetchHotelData(
         "10.776889", // latitude
         "106.70080", // longitude

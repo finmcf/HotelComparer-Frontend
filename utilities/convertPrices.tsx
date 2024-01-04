@@ -1,18 +1,18 @@
 import { HotelData } from "../interfaces/HotelDataInterface";
-
-type CurrencyInfo = {
-  code: string;
-  exchangeRate: {
-    rate: number;
-  };
-};
+import { CurrencyInfo } from "../contexts/GlobalContext"; // Update the import path as needed
 
 export const convertPrices = (
   hotelData: HotelData[],
   newCurrencyInfo: CurrencyInfo
 ): HotelData[] => {
+  // Ensure that exchangeRate is present before proceeding
+  if (!newCurrencyInfo.exchangeRate) {
+    console.error("Exchange rate information is not available.");
+    return hotelData; // Return the original data if exchange rate is not available
+  }
+
   const rate = newCurrencyInfo.exchangeRate.rate;
-  const newCurrency = newCurrencyInfo.code;
+  const newCurrency = newCurrencyInfo.details.code; // Use the code from CurrencyDetails
 
   return hotelData.map((hotel) => {
     const updatedHotel: HotelData = { ...hotel };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useGlobal } from "../contexts/GlobalContext";
-import currencies from "../data/currencies.json";
+import { useGlobal, CurrencyDetails } from "../contexts/GlobalContext";
+import rawCurrencies from "../data/currencies.json";
+
 import languages from "../data/languages.json";
 import countriesData from "../data/countries.json";
 import fetchAndUpdateCurrencyRates from "../utilities/fetchAndUpdateCurrencyRates";
@@ -19,7 +20,12 @@ interface Countries {
   [key: string]: string;
 }
 
+type Currencies = {
+  [key: string]: CurrencyDetails;
+};
+
 const countries: Countries = countriesData as Countries;
+const currencies: Currencies = rawCurrencies as Currencies;
 
 const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
   isOpen,
@@ -39,7 +45,7 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
     currentLanguage.code
   );
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState<string>(
-    currentCurrency.code
+    currentCurrency.details.code
   );
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>(
     currentCountry.code
@@ -49,7 +55,7 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
 
   useEffect(() => {
     setSelectedLanguageCode(currentLanguage.code);
-    setSelectedCurrencyCode(currentCurrency.code);
+    setSelectedCurrencyCode(currentCurrency.details.code);
     setSelectedCountryCode(currentCountry.code);
   }, [currentLanguage, currentCurrency, currentCountry]);
 
@@ -77,14 +83,15 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
       (lang) => lang.code === selectedLanguageCode
     );
     const selectedCountryName = countries[selectedCountryCode];
+    const selectedCurrencyDetails = currencies[selectedCurrencyCode];
 
-    if (selectedLanguage && selectedCountryName) {
+    if (selectedLanguage && selectedCountryName && selectedCurrencyDetails) {
       setLanguage(selectedLanguage);
       setCountry({ code: selectedCountryCode, name: selectedCountryName });
 
       // Fetch and update currency rates
       await fetchAndUpdateCurrencyRates(
-        currentCurrency.code,
+        currentCurrency.details.code, // Use the details.code from current currency
         selectedCurrencyCode,
         setCurrency // Pass the setCurrency function from useGlobal
       );
