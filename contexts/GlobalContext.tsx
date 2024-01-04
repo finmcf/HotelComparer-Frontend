@@ -1,6 +1,14 @@
 import React, { createContext, useState, useContext } from "react";
 
 // Types for various pieces of global state
+
+type ExchangeRateInfo = {
+  baseCurrency: string;
+  targetCurrency: string;
+  rate: number;
+  timestamp: number;
+};
+
 type CurrencyInfo = {
   symbol: string;
   name: string;
@@ -9,6 +17,7 @@ type CurrencyInfo = {
   rounding: number;
   code: string;
   name_plural: string;
+  exchangeRate?: ExchangeRateInfo;
 };
 
 type LanguageInfo = {

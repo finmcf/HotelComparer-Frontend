@@ -296,15 +296,7 @@
     "code": "DZD",
     "name_plural": "Algerian dinars"
   },
-  "EEK": {
-    "symbol": "Ekr",
-    "name": "Estonian Kroon",
-    "symbol_native": "kr",
-    "decimal_digits": 2,
-    "rounding": 0,
-    "code": "EEK",
-    "name_plural": "Estonian kroons"
-  },
+
   "EGP": {
     "symbol": "EGP",
     "name": "Egyptian Pound",
@@ -314,15 +306,7 @@
     "code": "EGP",
     "name_plural": "Egyptian pounds"
   },
-  "ERN": {
-    "symbol": "Nfk",
-    "name": "Eritrean Nakfa",
-    "symbol_native": "Nfk",
-    "decimal_digits": 2,
-    "rounding": 0,
-    "code": "ERN",
-    "name_plural": "Eritrean nakfas"
-  },
+
   "ETB": {
     "symbol": "Br",
     "name": "Ethiopian Birr",
@@ -998,15 +982,7 @@
     "code": "UZS",
     "name_plural": "Uzbekistan som"
   },
-  "VEF": {
-    "symbol": "Bs.F.",
-    "name": "Venezuelan Bolívar",
-    "symbol_native": "Bs.F.",
-    "decimal_digits": 2,
-    "rounding": 0,
-    "code": "VEF",
-    "name_plural": "Venezuelan bolívars"
-  },
+
   "VND": {
     "symbol": "₫",
     "name": "Vietnamese Dong",
@@ -1060,14 +1036,5 @@
     "rounding": 0,
     "code": "ZMK",
     "name_plural": "Zambian kwachas"
-  },
-  "ZWL": {
-    "symbol": "ZWL$",
-    "name": "Zimbabwean Dollar",
-    "symbol_native": "ZWL$",
-    "decimal_digits": 0,
-    "rounding": 0,
-    "code": "ZWL",
-    "name_plural": "Zimbabwean Dollar"
   }
 }

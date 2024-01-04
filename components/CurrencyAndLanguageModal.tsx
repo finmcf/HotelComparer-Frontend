@@ -3,6 +3,7 @@ import { useGlobal } from "../contexts/GlobalContext";
 import currencies from "../data/currencies.json";
 import languages from "../data/languages.json";
 import countriesData from "../data/countries.json";
+import fetchAndUpdateCurrencyRates from "../utilities/fetchAndUpdateCurrencyRates";
 
 interface CurrencyAndLanguageModalProps {
   isOpen: boolean;
@@ -71,20 +72,24 @@ const CurrencyAndLanguageModal: React.FC<CurrencyAndLanguageModalProps> = ({
     };
   }, [isOpen, onClose]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const selectedLanguage = Object.values(languages).find(
       (lang) => lang.code === selectedLanguageCode
     );
-    const selectedCurrency = Object.values(currencies).find(
-      (curr) => curr.code === selectedCurrencyCode
-    );
     const selectedCountryName = countries[selectedCountryCode];
 
-    if (selectedLanguage && selectedCurrency && selectedCountryName) {
+    if (selectedLanguage && selectedCountryName) {
       setLanguage(selectedLanguage);
-      setCurrency(selectedCurrency);
       setCountry({ code: selectedCountryCode, name: selectedCountryName });
-      onSave(selectedLanguage.code, selectedCurrency.code, selectedCountryCode);
+
+      // Fetch and update currency rates
+      await fetchAndUpdateCurrencyRates(
+        currentCurrency.code,
+        selectedCurrencyCode,
+        setCurrency // Pass the setCurrency function from useGlobal
+      );
+
+      onSave(selectedLanguage.code, selectedCurrencyCode, selectedCountryCode);
     }
     onClose();
   };
