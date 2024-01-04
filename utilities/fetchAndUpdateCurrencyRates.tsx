@@ -1,13 +1,19 @@
+import { CurrencyInfo } from "../contexts/GlobalContext"; // Update the import path as needed
 import currencies from "../data/currencies.json";
 
+interface ApiResponse {
+  rate: number;
+  timestamp?: number;
+}
+
 const fetchAndUpdateCurrencyRates = async (
-  baseCurrencyCode,
-  targetCurrencyCode,
-  setCurrency
-) => {
+  baseCurrencyCode: string,
+  targetCurrencyCode: string,
+  setCurrency: (currency: CurrencyInfo) => void
+): Promise<void> => {
   try {
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string; // Type assertion for environment variables
+    const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET as string; // Type assertion for environment variables
 
     const response = await fetch(
       `https://localhost:7033/api/CurrencyExchange?baseCurrency=${baseCurrencyCode}&targetCurrency=${targetCurrencyCode}`,
@@ -23,7 +29,7 @@ const fetchAndUpdateCurrencyRates = async (
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data: ApiResponse = await response.json();
     const targetCurrencyInfo = currencies[targetCurrencyCode];
 
     if (!targetCurrencyInfo) {

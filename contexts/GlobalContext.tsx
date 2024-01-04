@@ -2,14 +2,14 @@ import React, { createContext, useState, useContext } from "react";
 
 // Types for various pieces of global state
 
-type ExchangeRateInfo = {
+export type ExchangeRateInfo = {
   baseCurrency: string;
   targetCurrency: string;
   rate: number;
   timestamp: number;
 };
 
-type CurrencyInfo = {
+export type CurrencyInfo = {
   symbol: string;
   name: string;
   symbol_native: string;
