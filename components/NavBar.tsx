@@ -11,7 +11,7 @@ const NavBar: React.FC<NavBarProps> = ({ onCurrencyClick, onFlagClick }) => {
   const { country, currency } = useGlobal();
 
   return (
-    <div className="w-full h-[43px] bg-gray-200 flex justify-end items-center px-[17px]">
+    <div className="fixed top-0 left-0 w-full z-50 bg-gray-200 flex justify-end items-center px-4 lg:px-8 h-[43px]">
       <div className="flex gap-[26px] items-center">
         <button
           aria-label="Select Language and Currency"

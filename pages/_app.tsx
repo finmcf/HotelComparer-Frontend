@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { GlobalProvider, useGlobal } from "../contexts/GlobalContext"; // Correctly import useGlobal
+import { GlobalProvider, useGlobal } from "../contexts/GlobalContext";
 import NavBar from "../components/NavBar";
 import CurrencyAndLanguageModal from "../components/CurrencyAndLanguageModal";
 import { BeatLoader } from "react-spinners";
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isLoading, isModalOpen, closeModal, openModal } = useGlobal(); // useGlobal hook in use here
+  const { isLoading, isModalOpen, closeModal, openModal } = useGlobal();
 
   const handleCurrencyAndLanguageSave = (
     language: string,
@@ -41,7 +41,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <BeatLoader color="#FFFFFF" />
         </div>
       )}
-      {children}
+      <div className="pt-[43px]">{children}</div>
       {isModalOpen && (
         <CurrencyAndLanguageModal
           isOpen={isModalOpen}

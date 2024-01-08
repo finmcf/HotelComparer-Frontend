@@ -1,9 +1,6 @@
 import React from "react";
 import { HotelData } from "../interfaces/HotelDataInterface";
-import { CurrenciesType, CurrencyDetails } from "../path-to-your-type-file"; // Adjust the path accordingly
-import rawCurrencies from "../data/currencies.json";
-
-const currencies: CurrenciesType = rawCurrencies as CurrenciesType;
+import currencies from "../data/currencies.json";
 
 interface HotelResultProps {
   hotelData: HotelData;
