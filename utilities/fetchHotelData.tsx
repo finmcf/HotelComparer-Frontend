@@ -63,7 +63,7 @@ export const useFetchHotelData = () => {
 
       return data;
     } catch (error) {
-      console.error("Error fetch hotel data:", error);
+      console.error("Error fetchl data:", error);
       throw error;
     } finally {
       setLoading(false);
